@@ -1,0 +1,17 @@
+{
+  "name": "ぐるくん日記",
+  "short_name": "ぐるくん日記",
+  "description": "ゆうすけ × おゆき の交換日記",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#A8E6E6",
+  "theme_color": "#5BBFBF",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

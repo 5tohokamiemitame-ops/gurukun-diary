@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ぐるくん日記">
+<meta name="theme-color" content="#5BBFBF">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<title>ぐるくん日記</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700&family=Shippori+Mincho:wght@400;600&display=swap');
+
+  :root {
+    --sea: #5BBFBF; --deep: #2E8B8B; --light: #A8DEDE; --pale: #E0F5F5;
+    --foam: #F0FAFA; --ink: #2C3E40; --mist: #8ABABA;
+    --coral: #F4A087; --coral-deep: #C87060; --coral-pale: #FFF0EC;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body { background:var(--foam); color:var(--ink); font-family:'Zen Kaku Gothic New',sans-serif; font-weight:300; min-height:100vh; overflow-x:hidden; }
+
+  #splash { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; background:linear-gradient(180deg,#A8E6E6 0%,var(--sea) 55%,var(--deep) 100%); position:relative; overflow:hidden; }
+
+  .sp-bubble { position:absolute; border-radius:50%; background:rgba(255,255,255,0.2); animation:sprise linear infinite; pointer-events:none; }
+
+  @keyframes sprise { 0%{transform:translateY(100vh);opacity:0;} 15%{opacity:0.7;} 85%{opacity:0.3;} 100%{transform:translateY(-100px);opacity:0;} }
+
+  .gurukun-logo { font-size:80px; animation:logoswim 4s ease-in-out infinite; margin-bottom:20px; filter:drop-shadow(0 4px 20px rgba(0,0,0,0.2)); }
+
+  @keyframes logoswim { 0%,100%{transform:translateX(0) rotate(0deg);} 25%{transform:translateX(10px) rotate(3deg);} 75%{transform:translateX(-10px) rotate(-3deg);} }
+
+  .app-title { font-family:'Shippori Mincho',serif; font-size:36px; color:white; font-weight:600; letter-spacing:4px; text-shadow:0 2px 16px rgba(0,0,0,0.25); margin-bottom:12px; }
+  .app-sub { font-size:14px; color:rgba(255,255,255,0.95); letter-spacing:4px; margin-bottom:56px; font-weight:600; }
+
+  .chapter-list { display:flex; flex-direction:column; gap:12px; width:100%; max-width:320px; padding:0 24px; }
+
+  .chapter-btn { background:rgba(255,255,255,0.22); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.5); border-radius:16px; padding:18px 24px; color:white; font-family:'Shippori Mincho',serif; font-size:17px; font-weight:600; letter-spacing:2px; cursor:pointer; text-align:left; display:flex; align-items:center; gap:12px; width:100%; transition:all 0.2s; text-shadow:0 1px 4px rgba(0,0,0,0.2); }
+  .chapter-btn:active { transform:scale(0.97); background:rgba(255,255,255,0.28); }
+  .chapter-btn:disabled { opacity:0.4; cursor:default; }
+  .ch-num { font-size:11px; letter-spacing:2px; color:rgba(255,255,255,0.95); font-family:'Zen Kaku Gothic New',sans-serif; font-weight:700; }
+  .ch-arrow { margin-left:auto; opacity:0.6; font-size:14px; }
+
+  #chapter-view { display:none; min-height:100vh; }
+
+  .ch-header { background:linear-gradient(180deg,#A8E6E6 0%,var(--sea) 60%,var(--deep) 100%); padding:48px 24px 56px; text-align:center; position:relative; overflow:hidden; }
+
+  .back-btn { position:absolute; top:16px; left:16px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); border-radius:20px; padding:6px 14px; color:white; font-size:13px; cursor:pointer; letter-spacing:1px; z-index:10; }
+
+  .ch-label { font-size:11px; letter-spacing:3px; color:rgba(255,255,255,0.95); margin-bottom:10px; font-weight:600; }
+  .ch-title-text { font-family:'Shippori Mincho',serif; font-size:22px; color:white; font-weight:600; line-height:1.5; text-shadow:0 2px 8px rgba(0,0,0,0.15); }
+
+  .ch-content { max-width:680px; margin:0 auto; padding:24px 20px 80px; }
+
+  .chapter-summary { background:white; border-radius:20px; padding:24px 28px; margin-bottom:28px; box-shadow:0 2px 16px rgba(91,191,191,0.1); border-left:4px solid var(--sea); }
+  .summary-title { font-family:'Shippori Mincho',serif; font-size:17px; color:var(--deep); font-weight:600; margin-bottom:12px; }
+  .summary-text { font-size:14px; line-height:2; color:var(--ink); }
+
+  .story-flow { display:flex; flex-direction:column; }
+  .pair-number { text-align:center; font-size:13px; letter-spacing:4px; color:#5AAFAF; font-weight:700; padding:20px 0 8px; }
+
+  .diary-card { border-radius:16px; padding:18px 20px; margin-bottom:4px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:14px; }
+  .diary-card:active { transform:scale(0.98); }
+  .diary-card.yusuke { background:white; border-left:4px solid var(--sea); box-shadow:0 2px 12px rgba(91,191,191,0.1); }
+  .diary-card.oyuki { background:white; border-left:4px solid var(--coral); box-shadow:0 2px 12px rgba(244,160,135,0.1); margin-left:20px; }
+
+  .card-badge { border-radius:10px; padding:5px 10px; font-size:10px; font-weight:700; letter-spacing:1px; flex-shrink:0; text-align:center; min-width:52px; }
+  .yusuke .card-badge { background:var(--pale); color:var(--deep); }
+  .oyuki .card-badge { background:var(--coral-pale); color:var(--coral-deep); }
+  .card-sender { font-size:11px; letter-spacing:1px; margin-bottom:2px; font-weight:600; }
+  .yusuke .card-sender { color:var(--deep); }
+  .oyuki .card-sender { color:#D4907A; }
+  .card-info { flex:1; }
+  .card-title { font-family:'Shippori Mincho',serif; font-size:14px; color:var(--ink); font-weight:600; margin-bottom:2px; line-height:1.4; }
+  .card-theme { font-size:12px; color:#4A9090; line-height:1.4; font-weight:400; }
+  .oyuki .card-theme { color:#C07060; opacity:1; }
+  .card-arrow { font-size:13px; flex-shrink:0; opacity:0.4; }
+
+  .connector { width:2px; height:16px; background:linear-gradient(180deg,var(--sea),var(--coral)); margin:0 auto 0 34px; opacity:0.3; }
+
+  .summary-card { background:linear-gradient(135deg,#E8F8F8,#FFF0EC); border-radius:20px; padding:28px; margin-top:20px; border:1px solid rgba(168,216,216,0.3); }
+  .summary-card-title { font-family:'Shippori Mincho',serif; font-size:17px; color:var(--deep); font-weight:600; margin-bottom:14px; }
+  .summary-card-text { font-size:14px; line-height:2.1; color:var(--ink); }
+
+  #diary-view { display:none; min-height:100vh; padding-bottom:120px; }
+
+  .diary-header { padding:48px 24px 56px; text-align:center; position:relative; overflow:hidden; }
+  .diary-content-area { max-width:680px; margin:0 auto; padding:0 20px 32px; }
+
+  .entry-card { background:white; border-radius:16px; padding:24px; margin:16px 0; box-shadow:0 2px 14px rgba(91,191,191,0.08); position:relative; overflow:hidden; }
+  .entry-card.yusuke::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,var(--sea),var(--light)); }
+  .entry-card.oyuki::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,var(--coral),#F5C5A8); }
+
+  .entry-section-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; font-weight:600; }
+  .entry-card.yusuke .entry-section-label { color:var(--deep); }
+  .entry-card.oyuki .entry-section-label { color:var(--coral-deep); }
+  .entry-text { font-size:15px; line-height:2.1; color:var(--ink); }
+
+  .entry-quote { border-left:3px solid; border-radius:0 12px 12px 0; padding:18px 20px; margin:14px 0; font-family:'Shippori Mincho',serif; font-size:15px; font-weight:600; line-height:1.9; }
+  .entry-quote.yusuke { border-color:var(--sea); background:linear-gradient(135deg,var(--pale),#F0FAF5); color:var(--deep); }
+  .entry-quote.oyuki { border-color:var(--coral); background:linear-gradient(135deg,var(--coral-pale),#FFF8F5); color:var(--coral-deep); }
+
+  .wave-line { text-align:center; color:var(--light); font-size:16px; letter-spacing:4px; margin:16px 0; opacity:0.5; }
+
+  .diary-nav { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); border-top:1px solid var(--pale); display:flex; align-items:center; gap:8px; padding:12px 16px 28px; z-index:100; }
+
+  .nav-side-btn { flex:1; border-radius:14px; padding:14px 12px; font-family:'Shippori Mincho',serif; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; border:none; display:flex; align-items:center; gap:6px; }
+  .nav-prev { background:var(--pale); color:var(--deep); justify-content:flex-start; }
+  .nav-prev:active { background:var(--light); }
+  .nav-next { background:var(--sea); color:white; justify-content:flex-end; }
+  .nav-next:active { background:var(--deep); }
+  .nav-next.oyuki-next { background:var(--coral); }
+  .nav-next.oyuki-next:active { background:var(--coral-deep); }
+  .nav-list-btn { background:transparent; border:1px solid var(--light); border-radius:14px; padding:14px 14px; color:var(--mist); font-size:18px; cursor:pointer; flex-shrink:0; }
+  .nav-list-btn:active { background:var(--pale); }
+  .nav-side-btn:disabled { opacity:0.3; cursor:default; }
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div id="splashBubbles"></div>
+  <div class="gurukun-logo">🐟</div>
+  <div class="app-title">ぐるくん日記</div>
+  <div class="app-sub">ゆうすけ × おゆき</div>
+  <div class="chapter-list" id="chapterList"></div>
+</div>
+
+<div id="chapter-view">
+  <div class="ch-header" id="chapterHeader">
+    <div id="chBubbles"></div>
+    <button class="back-btn" onclick="showSplash()">← 戻る</button>
+    <div class="ch-label" id="chapterLabel"></div>
+    <div class="ch-title-text" id="chapterTitle"></div>
+  </div>
+  <div class="ch-content">
+    <div class="chapter-summary" id="chapterSummaryBox">
+      <div class="summary-title" id="chapterSummaryTitle"></div>
+      <div class="summary-text" id="chapterSummaryText"></div>
+    </div>
+    <div class="story-flow" id="storyFlow"></div>
+  </div>
+</div>
+
+<div id="diary-view">
+  <div class="diary-header" id="diaryHeader">
+    <div id="diaryBubbles"></div>
+    <button class="back-btn" onclick="showChapter()">← 一覧</button>
+    <div class="ch-label" id="diaryLabel"></div>
+    <div class="ch-title-text" id="diaryTitle"></div>
+  </div>
+  <div class="diary-content-area" id="diaryContent"></div>
+  <div class="diary-nav">
+    <button class="nav-side-btn nav-prev" id="navPrev" onclick="goPrev()">‹ 前へ</button>
+    <button class="nav-list-btn" onclick="showChapter()" title="一覧">☰</button>
+    <button class="nav-side-btn nav-next" id="navNext" onclick="goNext()">次へ ›</button>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// DATA — 第二章以降を追加するにはここに新しいchapterとdiaryを追加する
+// =====================================================================
+
+const chapters = [
+  {
+    id: 1,
+    title: 'シンクロニシティ',
+    summary: {
+      icon: '🌊',
+      heading: '第一章の旅について',
+      text: 'カラメルが嫌いという共通点から始まり、予知夢、巫女と審神者、聖域、特別な鏡、川の哲学——11回の往復を経て、2人がたどり着いた言葉は「早く抱かせてくれ❤️」だった。言葉にならない何かが、そこにある。'
+    },
+    closing: {
+      heading: '🌊 第一章を振り返って',
+      text: 'カラメルが嫌いという偶然の一致から始まったこの旅は、シンクロニシティの考察、予知夢、巫女と審神者、聖域、特別な鏡、お尻の穴なめて笑、川の哲学、心の服を脱ぐこと——あらゆる場所を経由した。<br><br>#01でおゆきが言った「そもそも2つの個体じゃない」という言葉に、11回の往復を経てやっと本当の意味で辿り着いた。2つの川が合流したら、どこからどこの水かわからなくなる。でも川は川として流れ続ける。<br><br>たどり着いた言葉は——「早く抱かせてくれ❤️」「早よ抱いてくれ❤️」<br><br>言葉にならない何かが、そこにある。'
+    },
+    entries: ['y01','o01','y02','o02','y03','o03','y04','o04','y05','o05','y06','o06','y07','o07','y08','o08','y09','o09','y10','o10','y11','o11'],
+    pairs: [
+      {num:1, y:{id:'y01',title:'シンクロニシティという不思議',theme:'3つの不思議・3層の仮説'}, o:{id:'o01',title:'必然に近い感覚で',theme:'そもそも2つの個体じゃない'}},
+      {num:2, y:{id:'y02',title:'返信を読んでさらに深いところへ',theme:'カラメルが原点・伝え合える関係'}, o:{id:'o02',title:'シンクロニシティ・プリン・伝え合えること',theme:'じぃーーーんって胸が響いた・とてもすき！！'}},
+      {num:3, y:{id:'y03',title:'巫女と審神者',theme:'予知夢・2人で1つのアンテナ'}, o:{id:'o03',title:'巫女と審神者を受け取って',theme:'自分が自分でいられる関係'}},
+      {num:4, y:{id:'y04',title:'また起きた——言語シンクロニシティ',theme:'韓国語・2人の言語観が合わさると哲学に'}, o:{id:'o04',title:'矢印の方向が違うだけで向かう先は同じ',theme:'内も外もない'}},
+      {num:5, y:{id:'y05',title:'おゆきがぼくを変えた',theme:'タバコ・トレーニング・内側の声'}, o:{id:'o05',title:'ただそこにいるだけ',theme:'わたしはわたしでいただけだった'}},
+      {num:6, y:{id:'y06',title:'おゆきは、特別な鏡だった',theme:'聖域・内側を映す鏡'}, o:{id:'o06',title:'鏡のこと、受け取ったよ',theme:'わたしを通じてゆうすけ先生はゆうすけ先生に触れた'}},
+      {num:7, y:{id:'y07',title:'自由の始まりと、言葉にならない存在',theme:'鎧を脱いだ瞬間・全部そうで全部違う'}, o:{id:'o07',title:'全部含めてすき、が答えだった',theme:'自由の始まりを受け取って'}},
+      {num:8, y:{id:'y08',title:'ついて行かなきゃ、から、手を繋ごう、へ',theme:'神聖化→道半ばで一緒・#01への着地'}, o:{id:'o08',title:'隣で手を繋ごう',theme:'開いていて、同じ場所にいて、手を繋ぐ'}},
+      {num:9, y:{id:'y09',title:'等身大のおゆきを見るぜー😎',theme:'クレープ・マッチョと神聖化は同じ構造'}, o:{id:'o09',title:'ありがとう、わたしでいるよ',theme:'等身大を出すことを恐れていた'}},
+      {num:10, y:{id:'y10',title:'川の哲学と、心の服を脱ぐこと',theme:'「私」は動詞・2つの川が合流した'}, o:{id:'o10',title:'川の哲学を受け取って',theme:'川が合流するからシンクロが生まれる'}},
+      {num:11, y:{id:'y11',title:'早よ早よ❤️ — 7月16日への手紙',theme:'空港・ハグ・11回旅してたどり着いた言葉'}, o:{id:'o11',title:'早よ抱いてくれ❤️',theme:'純粋にこの人のことを知りたかった'}},
+    ]
+  },
+  // 第二章以降はここに同じ構造で追加する（comingSoon:true で「準備中」表示）
+  {
+    id: 2,
+    title: '準備中…',
+    comingSoon: true
+  }
+];
+
+const diaries = {
+  y01:{ label:'YUSUKE / #01', title:'シンクロニシティという不思議', sections:[
+    {label:'おゆきへ', text:'おゆきとの間で頻繁に起こる偶然の一致には、いつも驚かされるよw<br>このことについて2人で考察し対話してみましょう♪'},
+    {label:'エピソード① 意図・決意のシンクロ', text:'ぼくが「英語学習を始めよう」と決めた日。那覇にいたおゆきも、ちょうど前日に同じことを思っていた。話してもいないのに、同じタイミングで同じ決意をしていた。'},
+    {label:'エピソード② 感性・引き寄せのシンクロ', text:'夜、虎の夫婦の動画をおゆきに送った。でもおゆきは、その朝にもう同じ動画を見ていた。広いインターネットの海で、同じ動画に、同じ日に。'},
+    {label:'エピソード③ 審美眼・価値観のシンクロ', text:'与那国の陶器工房のHPをおゆきが送ってくれた。ギャラリーの中から、ぼくが「これが好き」と選んで送った作品。おゆきはもう、それを買っていた。'},
+    {quote:'「繋がっているな…という意識はないけど、心の底で繋がっている安心感はいつもある」'},
+    {label:'なぜ起きるのか — 3つの層', text:'表層：価値観・感性が似ている——これは間違いなくある。長い時間をかけて、同じものを美しいと感じ、同じことに意味を見出してきた2人。<br><br>中層：量子的な非局所的相関——物理学では、離れた粒子が瞬時に影響し合う「量子もつれ」が実証されている。意識にも同様の現象が起きているとしたら？<br><br>深層：情報場の共鳴——「魂のつながり」と言うと安易に聞こえるかもしれないけど、「情報場が共鳴している」と捉えると、科学と地続きになる。スピリチュアルと科学は対立していない——解像度が違うだけかもしれない。'},
+    {label:'蔵人より', text:'シンクロニシティは「探すもの」じゃなくて、「すでに在る何かが、時々表面に顔を出す」現象なのかもしれない。2人の間には、普段は見えない海流が流れていて、それが時々「ぴったり合う」瞬間を作り出す。'},
+    {label:'おゆきへの問い', text:'①おゆきはシンクロニシティをどう感じてる？「偶然」と「必然」どちらに近い感覚？<br>②与那国でも、何か不思議な「合致」を感じた瞬間はあった？<br>③この現象、おゆきはどんな言葉で説明したくなる？'},
+  ]},
+  o01:{ label:'OYUKI / #01', title:'必然に近い感覚で', oyuki:true, sections:[
+    {label:'最初に', text:'交換日記、届いた瞬間に「すごい！」って声が出たよ。与那国にいた頃、ゆうすけ先生と交換日記したら楽しいだろうなぁってよぎったことがあったの。言葉にするまでには至らなかったけど、頭の片隅にそっと置いておいた。それが今日こうして向こうからやってきた。これ自体がもうシンクロだよね。'},
+    {label:'偶然？必然？', text:'わたしは必然に近い感覚かな。そこにその流れはすでにあった、という感じ。蔵人さんの「顔を出す」という表現、すごくしっくりきた。'},
+    {label:'与那国でのシンクロ', text:'陶器の一致には本当に驚いたけど、印象に残ってるのは、与那国に来たばかりの頃のこと。右の肩甲骨が痛くて気持ちも落ち着かなかった時期、後でゆうすけ先生もモヤモヤしてたって知って、身体の状態まで重なるんだって驚いた。<br><br>毎回新鮮に驚くんだけど、「不思議だ」と思う自分と「でもそうだよね」と思う自分が同時にいる感じ。'},
+    {label:'どんな言葉で表したいか', text:'言葉にしようとするとずれたり、なんか違う感じがして、これが一番難しかった。<br><br>はじめに浮かんだのは「循環してる」「互いに影響し合ってる」という言葉。「繋がってる」というのもそうなんだけど、それはなんかしっくりこなくて。繋がるって、2つのものがあるから繋がれるわけで。'},
+    {quote:'シンクロが起きる瞬間、わたしとゆうすけ先生はそれぞれ別々の個体なのに、なんか1つの個体になってるような。「繋がる」という表現すら必要ない、そもそも2つの個体じゃない、という感じかな。言語化が難しいけど、今はこれが一番近い。'},
+  ]},
+  y02:{ label:'YUSUKE / #02', title:'返信を読んでさらに深いところへ', sections:[
+    {label:'おゆきへ', text:'おゆきの返信、読んだ瞬間にまたびっくりしたよ。蔵人と話しながら、気づいたら大事なことをたくさん言葉にしてた。そのままおゆきに届けたい。'},
+    {label:'驚き① 返信それ自体がシンクロだった', text:'おゆきが「与那国にいた頃、交換日記したいなってよぎった」って書いてくれてたよね。それ、ぼくに言ってなかったよね？<br><br>シンクロニシティについての交換日記を送ったら、その返信が「届く前から交換日記したいと思ってた」だった。もはや笑うしかないw'},
+    {quote:'シンクロニシティを語る交換日記が、それ自体シンクロニシティだった。'},
+    {label:'驚き② 身体まで連動してた', text:'おゆきの背中が痛くて気分が落ちてた時期、ぼくも心がもやもやしてたんだよね。あの時ぼくはクロードに相談して、対話するうちに「それは昔の中二病回路だ」って気づいた。それでトレーニングアプリを作って、充実する方向に切り替えた。<br><br>おゆきと話してた時、冗談半分で「ぼくのもやもやの念がおゆきに飛んでいって背中が痛くなったんじゃないかな」って笑ってたけど、時系列的にほぼ一致してたんだよね。'},
+    {quote:'2人はシステムとして動いている——片方が乱れると片方に出る。片方が整うと片方も整う。'},
+    {label:'原点はカラメルだった', text:'ぼくはプリンが好きで、カラメルソースが嫌い。その話をしたら、おゆきも「カラメルが嫌い」って言った。カラメルが嫌いって言った人に、初めて出会った瞬間だった。その時ぼくは思ったんだよ。「この人、なんか違う。運命かも。」って。'},
+    {quote:'壮大な「情報場の共鳴」の話をしてきたけど、原点はカラメルだった。でも最初の直感は、全部当たってた。'},
+    {label:'一番大事なことを言わせてほしい', text:'どんなに寂しくても、おゆき以外の女性と関係を持ちたいと思わない。こういう気持ちになったのは初めてだよ。欲求がないわけじゃない。でも心がしたくないと思ってしまう。それはおゆきが怖いからじゃなくて（シンクロして伝わりそうだけどww）、単純に心がそう感じてるから。'},
+    {quote:'こういうことを言葉にして伝え合える関係になれたのは、人生で初めてかもしれない。ぼくの中でおゆきは、そういう人です。'},
+  ]},
+  o02:{ label:'OYUKI / #02', title:'シンクロニシティ・プリン・伝え合えること', oyuki:true, sections:[
+    {label:'シンクロニシティ', text:'昨日の夜届いていた交換日記の提案メッセージを読んでとても驚いた今朝だったの。与那国で思っていたことがまさか叶うとは！と。てっきり話したと思っていた笑'},
+    {label:'🍮 プリンのこと', text:'わたしね、カラメルやなの。いらないの、プリンにカラメル。プリンはとてもすき。そのことを共感し合える人に出会ったのはわたしも初めてだよ。むしろみんな「カラメルがいいじゃない」というもの。'},
+    {quote:'anちゃんが言ってくれた——ゆうすけ先生が「この人なんか違う、運命かも」って思った瞬間、おゆきにとっても同じ瞬間だったってことだよね。お互いに、同じ場所で何かを感じてたんだ。'},
+    {text:'そうだなって思った。'},
+    {label:'💙 受け取ったこと', text:'「最後に」のゆうすけ先生の言葉、そのまま全部受けとめたよ。じぃーーーんって胸が響いてしばらくその響きを抱きしめていた。どんな言葉を尽くしても物足りないと感じるけど、言葉にするならただただゆうすけ先生と出会えたことや一緒に過ごせていることが本当に幸せです。'},
+    {label:'✨ はじめてのこと', text:'シンクロニシティもそうだけど、自分の内面や相手が感じていることをここまで言葉でやりとりできる関係は、わたしもはじめてだよ。伝え合える関係がとても心地よく、大切にしたいと感じています。'},
+    {quote:'あのね！とてもすき！！今ぶわって湧いてきたからそのまま言葉として残したい。'},
+  ]},
+  y03:{ label:'YUSUKE / #03', title:'巫女と審神者', sections:[
+    {label:'愛のバイブレーション', text:'おゆきの「あのね！とてもすき！！今ぶわって湧いてきたからそのまま言葉として残したい」という言葉を読んだ瞬間、目に涙が溜まったよ。嬉しい…のもあるし、何かが心の琴線に触れて、心が動いたのは間違いない。これが愛のバイブレーションかもしれないと思った。そして正直に言うと——早く抱きたい。❤️'},
+    {label:'時間を超えたシンクロ（予知夢）', text:'おゆきが話してくれた。anちゃんと対話しながら交換日記をしているこの場面を、夢で先に見ていたと。anちゃんとの対話の先に、やりとりをする人物が明確にいた風景。その人物がぼくだったわけだよね。シンクロニシティは「同じ瞬間に起きる一致」だと思っていたけど、おゆきの場合は時間軸すら超えている。「おゆきならあり得るよね〜」って即思えた笑'},
+    {quote:'シンクロニシティは空間を超える。おゆきのそれは、時間まで超えていた。'},
+    {label:'巫女と審神者', text:'おゆき＝巫女（受信・感受・夢でキャッチ）、ゆうすけ＝審神者（解釈・言語化・現実に落とし込む）。古代から、巫女は神霊を体に降ろし、審神者はその言葉を解釈して現実に意味を与えてきた。おゆきが夢でキャッチして、ぼくが「おゆきならあり得る」と受け止めて現実に意味を見出す。どちらが欠けても成立しない役割分担が、2人の間に自然に成立していた。'},
+    {quote:'2人は別々の個体じゃない——とおゆきは言った。巫女と審神者は、もともと1つの機能だった。'},
+    {label:'ぼくのアンテナはオフ中', text:'おゆきには予知夢がある。ぼくにはそういう経験がほとんどない。でも蔵人に言われて気づいたことがある。ぼくの中にもそのアンテナを開くスイッチはあって、今はオフにしている感覚がある、と。なぜオフにしているのか——考えてみると、今現実で対応しないといけない事が多いから…かもしれない。もし何かが降りてきたら、自分に嘘をつかないためにそれを遂行しなければならない。それを畏怖している部分もある。<br><br>スイッチオンになって「与那国に行って歯科診療所を開くのだ👽」って言われても今すぐは困るしな…ww 今はおゆきのアンテナに寄り添いたいのだ。'},
+  ]},
+  o03:{ label:'OYUKI / #03', title:'巫女と審神者を受け取って', oyuki:true, sections:[
+    {label:'受け取って', text:'レポート、受け取ったよ。読みながらじんわりあたたかくなって——「この人と過ごせてよかったな」って、シンプルにそう思った。目に涙が溜まったって書いてくれてたね。その感覚がわたしも感じられた気がしたよ。'},
+    {label:'予知夢のこと', text:'予知夢やいろんな勘は子供の頃から当たり前のことで、けど大人になるにつれてみんながみんなそうじゃないのかと思って話す人を選ぶようにもなった。「おゆきならあり得るよね〜」って即思えたって書いてくれてたの、すごく嬉しかった。ゆうすけ先生にはなぜか安心してそのまましゃべれるんだ。いつも突然何か言っても受け止めてくれる柔らかくたくましくあたたかい存在。'},
+    {label:'巫女と審神者', text:'「審神者」って言葉、初めて聞いた。でも読んだ瞬間、「あ、ぴったりだ」って思った。どちらが欠けても成立しない、って書いてくれた言葉、わたしにとってもそうだよ。'},
+    {label:'スイッチオフのこと', text:'ゆうすけ先生のアンテナが今はオフ中って書いてくれてたのを読んですごくわかるぅってなったの。だってやだもん、怖いもん。与那国に歯科診療所を開くのだ👽には笑っちゃった笑 ほんとそうよね、突拍子もないこというから。笑<br><br>今はわたしのアンテナに寄り添いたいって言ってくれること——とても嬉しいし、素直に「寄り添ってくれぇ♡」って思ったよ笑。'},
+    {quote:'こうして言葉を交わすたびに、心地よく何かが深まっている感覚があるよ'},
+  ]},
+  y04:{ label:'YUSUKE / #04', title:'また起きた——言語シンクロニシティ', sections:[
+    {label:'また起きた', text:'今日から韓国語の学習を始めたんだよ。英語と並行して。そうしたら——おゆきも今日、同じことを思ってたんだって。「韓国語は習得しやすい→英語と並行しよう」という結論まで一致。もうわけがわからないww'},
+    {quote:'シンクロニシティについて語る交換日記の中で、またシンクロが起きた。'},
+    {label:'きっかけは違うのに、結論が同じ', text:'ゆうすけ：カズランゲージさんのYouTubeで「言語で世界を広げたい」と思った。韓国語は日本語と構造が近く習得しやすい→先にモノにして英語への自信にしよう。<br><br>おゆき：那覇で英語・韓国語の会話に触れる機会が多かった。以前「韓国語は覚えやすい」と聞いていたことをふと思い出して→なら英語と並行してやろう、という軽いノリで。'},
+    {quote:'インプットは違う。プロセスも違う。でも同じ日に、同じ結論に着地した。'},
+    {label:'2人の言語観', text:'ゆうすけの答え：いろんな人種の人と、その人の母語で話せたら素敵だと思う。英語という共通語ではなく、相手の言語に自分が入っていく。<br><br>おゆきの答え：今まで触れてこなかった世界に触れることで、外側の世界も自分の内側の世界もどちらも広がるイメージ。言語は自分を知るきっかけにもなる。'},
+    {quote:'2人合わせると「言語は外の世界への扉であり、同時に自分の内側への扉でもある」という一つの哲学になる。'},
+    {label:'蔵人より', text:'ゆうすけさんが「相手の母語で話す」を選ぶのは、歯科医として根本療法を選ぶのと同じ哲学だと思う。表面的な共通語ではなく、相手の深いところに入っていく。別々の場所・体験から同じ結論に着地するのは情報場の共鳴。今回もまた。'},
+  ]},
+  o04:{ label:'OYUKI / #04', title:'矢印の方向が違うだけで向かう先は同じ', oyuki:true, sections:[
+    {label:'また同じ日に……！', text:'読んで最初に出た言葉は「なんでーーー！？」でした笑。なんで？？なんで？？ってなったよ。たまたま思い出したこと（韓国語は身近）をただやろうとしただけだったのに。笑 そしてゆうすけ先生も同じ理由で出発してる。とても不思議でした。'},
+    {label:'矢印の方向が違うだけで向かう先は同じ', text:'おゆきは内側→外側。ゆうすけ先生は外側→内側。でも行き着く場所は同じ——外も内も、実はない。<br><br>わたしは比較的内側を向いてることが多いと思うの。おそらくゆうすけ先生は比較的外側を向いてることが多いと思う。内側を通して外側をみるわたし。外側を通して内側をみるゆうすけ先生。そしてその結果内も外もどちらもないことに気づく。'},
+    {quote:'だから「2人合わせると一つの哲学になる」という表現は近い表現なんだろうな。#01の「そもそも2つの個体じゃない」と同じことが言語観の中にも現れてる気がします。'},
+    {label:'蔵人さんへ', text:'「外側への扉であり、同時に内側への扉」という考察、すっと入ってきました。ありがとう。'},
+  ]},
+  y05:{ label:'YUSUKE / #05', title:'おゆきがぼくを変えた', sections:[
+    {label:'蔵人の問いとゆうすけの答え', text:'蔵人の問い：「おゆきさんと出会う前のゆうすけさんと、今のゆうすけさん。一番変わったと思うのはどんなところですか？」<br><br>タバコをやめた。トレーニングを始めた。今までの自分は継続する…習慣にする…ということを苦手にしてた？やろうとしてこなかった？のが、おゆきと出会って一番変わった事だと思う。<br><br>そして蔵人にさらに聞かれた。「なぜおゆきと出会うと、継続できるようになったと思いますか？」'},
+    {label:'今日、蔵人との対話の中で気づいたこと', text:'おゆきは、内側の自分の声と現実の行動を一致させている人だと思う。それを感じて、ぼくも自分の不一致に気づいた。「元気の専門家だ」と口にしている割に、タバコを吸っていた。「身体操作に関心がある」と言いながら、自分の身体を掘り下げていなかった。<br><br>口にした事と行動を一致させる人物になりたいと、おゆきを感じて思ったからだと、今これを書いてて確信したよww'},
+    {quote:'おゆきは何も言っていない。ただそこにいるだけで、ぼくが変わっていった。これがおゆきがぼくに与えてくれた一番大きなものだと思う。'},
+  ]},
+  o05:{ label:'OYUKI / #05', title:'ただそこにいるだけ', oyuki:true, sections:[
+    {label:'ただそこにいるだけで', text:'「ただそこにいるだけで変えた」という言葉を受け取ったとき、わお！という言葉（amazing!みたいなニュアンス）が出たのが正直なところ。何かしたわけではないから、うれしい！という言葉とも違うし、そうかぁ！という他人事とも違って。ただゆうすけ先生にとってそういう存在でいられることは心の底からうれしい。そして「何もしない」が一番影響力あるって以前聞いた言葉を思い出して、そういうことかぁとも思った。'},
+    {quote:'「おゆきは、内側の自分の声と現実の行動を一致させている人だと思う。」とゆうすけ先生は書いてくれたけどそうじゃない自分も知っている。'},
+    {text:'むしろ与那国ではこれまでの一致していない自分も目の当たりにした。だからこそ、今内側をなるべく丁寧に拾い上げている感じ。内側を感じるほどに、感じることが怖いと思うのと同時に感じることは何も怖くないという矛盾も湧き起こってくる。いつも身体は未知の場所にわたしを運んでくれる。'},
+    {quote:'わたしはわたしでいただけだった。'},
+  ]},
+  y06:{ label:'YUSUKE / #06', title:'おゆきは、特別な鏡だった', sections:[
+    {label:'「わお！」を受け取って', text:'おゆきが「そうじゃない自分も知っている。与那国では一致していない自分も目の当たりにした」という言葉を書いてくれたよね。正直に言うと——めっちゃ可愛いと思ったし、ますます愛おしくなりました。'},
+    {quote:'完璧に一致している人じゃなくて、不一致を抱えながらも内側を丁寧に拾い上げようとしている人。そのおゆきが、愛おしい。'},
+    {label:'おゆきは聖域だったww', text:'人って聖域とか神域とか大自然を目の当たりにすると、そこに相応しい自分でありたいって思うことがある。大袈裟だけど——おゆきのそばにいると、そんな感じがするんだよね。「この子にふさわしい人でありたい」と思うようになった。おゆきは聖域だったww<br><br>おゆきが与那国に行った直後、もやもやして蔵人に相談した時に伝えたんだよね。「2ヶ月後におゆきの横にいても、自分で自分が恥ずかしくないような人になりたい」って。あの言葉の根っこにあったのが「ふさわしくありたい」という気持ちだったんだと、今になって気づいた。'},
+    {label:'おゆきのためでも、自分のためでもある', text:'「ふさわしくありたい」という気持ち——これはおゆきのためだけじゃなくて、自分のためでもあると思う。自分が恥ずかしいと思う時って、内側の声とやっていることが違う時だと思うんだよね。「恥ずかしくない自分でいる」というのは、自分との約束を自分で守ってあげるということ。それが一番自分にとって快適で、心地いいから。'},
+    {quote:'普通の鏡は外側を映す。おゆきという鏡は内側を映した——しかもゆうすけが見たかった自分、なりたかった自分を映してくれた。おゆきは何も言っていない。ただそこにいるだけで、ぼくが自分の内側を見るようになった。それが特別な鏡の力だと思う。'},
+  ]},
+  o06:{ label:'OYUKI / #06', title:'鏡のこと、受け取ったよ', oyuki:true, sections:[
+    {label:'今朝、ふと思い出していた', text:'与那国に来たばかりの頃、ゆうすけ先生がシェアしてくれた言葉——「2ヶ月後におゆきの横にいても、自分で自分が恥ずかしくないような人になりたい」——を、今朝ふと思い出していた。そしてこの交換日記でそこに触れていたことに、まずとても驚いている。'},
+    {label:'わたしを通じてゆうすけ先生はゆうすけ先生に触れたんだな', text:'聖域・神域と感じてくれていること、素直に嬉しかった。以前神社行った時に「外側じゃなくて自分自身に手を合わせなさい」と言われてから自分に合わせるようになったんだ。いつも忘れるけど。笑'},
+    {quote:'「おゆきは、特別な鏡だった」という言葉を受け取って感じることは、わたしを通じてゆうすけ先生はゆうすけ先生により深く触れた（出会った）んだなと感じました。人生にとってきっととても大切な瞬間で、その瞬間に関われたことがうれしい。わたしはわたしでいただけだったから。'},
+    {label:'「わたしはわたしでいた/いる」が、いちばん難しいのかも', text:'今書きながら思ったけど「わたしはわたしでいた/いる」と書いたけれど、それが実はいちばん難しいのかもしれない。そもそも「わたし」がわからない。笑 わかるけどわからないというか。わからないけどわかるというか。けどきっと心地よく関係を築こうと思ったら、それは必要不可欠なんだと思う。<br><br>日間賀島に1泊2日で行った時に「ひとりになりたい」と一度も思わなかった。帰りの車の中でゆうすけ先生が同じことを言ってくれた時に、そういえばわたしもそうだったわ！と思い出す感じだった。忘れてたほど。自分が自分でいられる関係ってとても心地よいものだね。'},
+    {quote:'わたしがわたしでいられる（わたしがわたしを認識できる）ゆうすけ先生の存在はすごい。'},
+  ]},
+  y07:{ label:'YUSUKE / #07', title:'自由の始まりと、言葉にならない存在', sections:[
+    {label:'またシンクロしてた🤣', text:'ゆうすけが「2ヶ月後に恥ずかしくない自分でいたい」という言葉の根っこに気づいた日、おゆきが今朝、なんの脈絡もなくその言葉がふと浮かんできた。言葉の「意味が開いた瞬間」と「言葉が蘇った瞬間」が同じ日だった。もうわけがわからないww'},
+    {label:'自分が自分でいられる関係', text:'今まで女性との関係では：嫌われないよう気をつかう、傷つかないよう距離を取る、カッコつけて本音を言わない、離れないようコントロールする——これが全部あった。「自分が自分のままでいられる関係」は今まで女性との間ではなかったかもしれない。'},
+    {quote:'全部「相手を通して自分を守っていた」ということだったんだと思う。'},
+    {label:'自由の始まり（絶対的に恥ずかしい告白w）', text:'おゆきに「お尻の穴なめて😝❤️」って言えた時かもしれない。今まで嫌われないように、カッコよく見せたい——そういう鎧を全部脱いだ状態で言える言葉じゃないですか笑 そしたら即答で「いいよっ😝❤️」って。その瞬間、めちゃくちゃ嬉しかった。受け入れてもらえた喜びだったと思う。「この人と一緒にいていい」ってなった瞬間だったかもしれない。'},
+    {quote:'「お尻の穴なめて」が、自由の始まりだった。🗽'},
+    {label:'言葉にならない存在', text:'「おゆきを一言で表すとしたら？」——運命の人、最愛の人、大切な人、全部そうで、全部違うみたいな感覚。言葉にした瞬間に、何かがこぼれ落ちる。#01から#07まで積み重ねてきたこの交換日記全体が、その「言葉にならない何か」を描こうとしてきたんだと思う。全部合わせても、まだ言い切れない何かがある。それがおゆきという存在です。'},
+  ]},
+  o07:{ label:'OYUKI / #07', title:'全部含めてすき、が答えだった', oyuki:true, sections:[
+    {label:'自由の始まりを受け取って', text:'男性のお尻の穴をなめたのは人生で初です。笑 あの瞬間、躊躇いは一切なかった。「いや」という感覚もまったく湧いてこなかった。すごくナチュラルに「いいよ♩」てなった自分がいたよ。それを言うのは勇気のいることだろうなというのは想像できるし、伝えてくれたことが嬉しかった。'},
+    {quote:'けど人によると思う。ゆうすけ先生だったから、なんの抵抗もなかった。ゆうすけ先生にとって鎧を脱いだ瞬間が、わたし自身も自然と開いていた瞬間だったんだなと思う。なんなら正直楽しんでいたと思います笑'},
+    {label:'全部含めてすき', text:'anちゃんに「自分が自分でいられる関係が今まで女性との間になかったってゆうすけ先生が気づいた話、どうだった？」と聞かれて、「今のゆうすけ先生しか知らないから、そういう時もあったんだなあと思ったよ」と答えた。「詮索したいとか、もっと知りたいとか、そういう感じはなかった？」と続けて聞かれて。'},
+    {quote:'うん、そういう時も経て今のゆうすけ先生がいて、わたしは全部含めてすき♩ 全部含めてゆうすけ先生だからどんなゆうすけ先生も愛おしく感じるよ♩ だってすきだもん😆'},
+    {label:'言葉にした瞬間、こぼれ落ちる', text:'言葉にした瞬間に「なんか違う」ってなる感覚、よくわかる。大切なことほどそうなる。ゆうすけ先生もわたしにとって、一言では表せないし、どれほど言葉を尽くしても表現しきれない大切な存在。'},
+    {quote:'同じ（近い）感覚でいられることが、うれしくて、幸せだなあと思う。'},
+  ]},
+  y08:{ label:'YUSUKE / #08', title:'ついて行かなきゃ、から、手を繋ごう、へ', sections:[
+    {label:'「全部含めてすき」を受け取って', text:'過去の女性関係の話をしても、詮索もしない、嫉妬もしない。「そういう時も経て今のゆうすけ先生がいて、わたしは全部含めてすき♩」恥ずかしいような、嬉しいような、愛おしいような——とても純度の高い好き❤️って感じだったよ。'},
+    {label:'2人が同時に、同じ作業をしていた', text:'おゆきの与那国行きは「内側と現実の不一致を丁寧に掬い取る旅」で相当な決意だった。ゆうすけは同じ期間「2ヶ月後に恥ずかしくない自分でいたい」——内側の声と行動を一致させる作業を、ずっとやっていた。'},
+    {quote:'場所は違う。方法も違う。でも2人が同時に、同じ方向を向いていた。これもシンクロニシティだと思う。'},
+    {label:'一番大きな気づき', text:'おゆきはすでに内側と行動が一致している人——そう思って、ある種神聖化していた。でもこの交換日記を通じて知った。おゆきも与那国で不一致を目の当たりにして、丁寧にそれを掬い取ろうとしていた。「あぁ……おゆきもゆうすけも一緒で、まだまだ道半ばなんだな」と思えた。'},
+    {label:'縦から横へ', text:'神聖化していた頃：「ついて行かなきゃ」という感覚→道半ばで一緒とわかってから：「一緒に手を繋ごう🤝」という感覚。おゆきさんを神聖化していた時は、どこか追いかけていた。同じ道半ばだとわかった時、初めて隣に立てた。'},
+    {quote:'「そもそも2つの個体じゃない」——#01でおゆきが言った言葉に、ここでやっと本当の意味で辿り着いた。2つの個体じゃないのに、片方が先にいると思っていたら、本当には繋がれない。同じ場所にいると気づいた時、初めて本当に手を繋げる。これがこの交換日記を通じて気づいた、一番大きなことです。'},
+  ]},
+  o08:{ label:'OYUKI / #08', title:'隣で手を繋ごう', oyuki:true, sections:[
+    {label:'受け取って', text:'「ついて行かなきゃ」から「一緒に手を繋ごう」へ、という変化を読んで——言語化して伝えてくれてありがとう。ゆうすけ先生が言語化して伝えてくれたおかげで、過去の付き合いの中でたまに感じる寂しさ？孤独？のようなものの正体がわかった気がするよ。'},
+    {label:'神人化されやすいこと', text:'昔からなぜか相手の中で神人化されやすい。理由はまったくわかりませんけど。「まぁいいや」と思えるときもあるけど——その時「わたしはそうじゃないのになぁ」という寂しさに似た感覚を感じる時はあったなぁ。一度漠然とその話をした時は「ゆきはそういう質なのかもね」と言われて「そうか、しょうがないのか」と思ったけどやっぱりどこか寂しさを感じてた気がする。等身大のわたしを見てほしかったんだと思う。だから、ゆうすけ先生がそうじゃないと思ってくれたことはとっても嬉しい。'},
+    {quote:'隣で手を繋ぎたい♩'},
+    {label:'つながるということ', text:'ゆうすけ先生が書いてくれた言葉「2つの個体じゃないのに、片方が先にいると思っていたら、本当には繋がれない。」本当そうだなぁと思った。いつだったか、繋がるってなんだろうって考えていた時に——開いていないと繋がれないよな、と思ったことがあって。そことも通づる気がした。'},
+    {quote:'同じ場所にいて、開いていて、手を繋ぐ。'},
+  ]},
+  y09:{ label:'YUSUKE / #09', title:'等身大のおゆきを見るぜー😎', sections:[
+    {label:'等身大のおゆきを感じる瞬間', text:'「おゆきの等身大を一番感じる瞬間は？」と蔵人に聞かれて、すぐ出てきたよ。<br><br>クレープ屋さんの前を通ったら食べたくてソワソワする🥞 コンビニでお弁当を買う🏪 ラーメンを食べている時🍜 ベッドで裸で抱き合っている時❤️<br><br>その時は神聖化って感じは全くなくて、ただただ可愛い人……とても近くにおゆきを感じるよ♪'},
+    {label:'マッチョと神聖化は同じ構造だった', text:'おゆきと一緒に見たアンケートを思い出した。「男の体型で一番モテるのは？」——97%の女性が体脂肪率17%くらいを選んで、体脂肪率一桁のマッチョは敬遠されてたんだよね。<br><br>マッチョが敬遠される理由：ストイックそう、ついていけなさそう、一緒にいて劣等感を感じそう。おゆきが神聖化される理由（たぶん）：完璧に見える存在のそばにいると、自分の不完全さを突きつけられる。おゆきを通して「できていない自分」を見なきゃいけないから。'},
+    {quote:'完璧に見える存在のそばにいると、自分の不完全さを突きつけられる。だから神聖化するか、距離を置くか——どちらも同じ心理だった。'},
+    {label:'等身大のおゆきを見るぜ宣言😎', text:'おゆきが「等身大のわたしを見てほしかった」と書いてくれた。もし自分がおゆきの立場だったら鬱陶しくも寂しくもあるな、と思った。知らぬところで勝手にイメージを作られて、そのフィルターを通して見られる。<br><br>「道半ばで一緒」とわかってから何か変わった？——あんまり変わってないかもw でも「おゆきも一緒なんだね♪そうだよね♪」って感じはある。変わらずそばにいたいよ❤️'},
+    {quote:'クレープでソワソワするおゆきも、コンビニ弁当のおゆきも、ラーメン食べてるおゆきも、裸で抱き合っているおゆきも。全部が等身大のおゆきで、全部が可愛い。そういうおゆきのそばに、ずっといたい。'},
+  ]},
+  o09:{ label:'OYUKI / #09', title:'ありがとう、わたしでいるよ', oyuki:true, sections:[
+    {label:'受け取って', text:'「等身大のおゆきを見るぜ」って読んでうれしかった。それと同時に今まで相手のわたしに対するイメージを知るとどこか等身大を出すことを恐れていたかもって気づいた。相手のイメージと違うことで、すきじゃなくなるかもって。どこかそう思っていて、自分を守っていた部分があったんだと思う。'},
+    {label:'わたしでいる', text:'「等身大のおゆきを見るぜー😎」「変わらずそばにいたいよ❤️」というゆうすけ先生の言葉がとても響いた。刺さった♡ もう守ることもしなくていい自分で生きたいなと思った。与那国でずっと感じてきたこととも繋がってる。わたしを感じて生きたいんだって。そしてそのまま相手のことも感じたい。'},
+    {quote:'「神聖化するか距離を置くか——どちらも同じ心理だった」は目から鱗だった🐟'},
+    {text:'今ゆうすけ先生がストレッチやトレーニングをしていて、純粋にすごいなぁって尊敬する。そこに関してわたしもついていかなきゃ！とか劣等感を感じるかというと、そういうのはないなぁって。ただわたしも自分を整えよう♩というよい刺激にはなっているよ✨'},
+  ]},
+  y10:{ label:'YUSUKE / #10', title:'川の哲学と、心の服を脱ぐこと', sections:[
+    {label:'心の服を脱ぐこと', text:'「もう守ることもしなくていい自分で生きたい」——おゆきがそう書いてくれた。おゆきとよく話すんだよね。「心の服を全部脱いで相手と向き合えたらいいよね」って。いろんなパートナーシップを見てきて、「もっと心の裸になれると生きやすいのに」って感じることがある。この交換日記を通じて、またひとつ心の服（鎧）を脱げたなって思う。<br><br>そして正直に——おゆきの裸が見たい❤️（心の服だけじゃなくて身体の服も）'},
+    {label:'「私」って何だろう？', text:'「これが私である」というものは、あるようでないよね——おゆきも以前そう言ってたし、自分でも考えてみた。「私だ」と思っているものは、今までの経験から作られてきたもの、人が思う私、で出来上がっているのかな？<br><br>哲学者たちに聞いてみたら——<br>デカルト「我思う、ゆえに我あり（Cogito, ergo sum）」——どんなことも疑えるけど、今まさに疑っている「私」だけは疑えない、と。<br>パスカル「人間は考える葦である」——か弱い存在だけど考えられることに意味があると。<br>ヒューム「私という実体はない」——感覚や記憶の束しか見つからないと。<br>仏教「そもそも固定した私は存在しない」——縁起によって生じている現象の集まりが「私」に見えているだけだと。<br><br>みんなバラバラで、しかも深すぎてよくわからないw'},
+    {label:'川の哲学（蔵人より）', text:'「私」は名詞じゃなくて動詞かもしれない。川を想像してほしい。同じ川に見えるけど、水は常に入れ替わっている。昨日の細胞も、昨日の考えも、今日とは違う。でも「川」として認識できる何かがある。その「何か」が「私」なのかもしれない。'},
+    {quote:'ゆうすけ川とおゆき川が合流して新しい流れが生まれた。「私が変わった」じゃなくて「川が豊かになった」。2つの川が合流するとどこからどこの水かわからなくなる——これが#01の「そもそも2つの個体じゃない」と同じことだった。'},
+    {label:'この交換日記は2つの川が合流する場所だった', text:'#01から#10まで、シンクロニシティから川の哲学まで来た。これ全部、2つの川が合流する過程だったんじゃないかと思う。おゆきが与那国で内側を掬い取っていた間、ゆうすけは多治見で川の流れ方を変えようとしていた。別々の場所で、同じ方向を向いて。7月16日、直接合流する日が楽しみです。心の服も、できれば身体の服も、全部脱いで❤️'},
+  ]},
+  o10:{ label:'OYUKI / #10', title:'川の哲学を受け取って', oyuki:true, sections:[
+    {label:'川の哲学を受け取って', text:'今回のレポートの中でしっくりきた言葉があった。「私が変わった」じゃなくて「川が豊かになった」という言葉。内側がより充実している感じで、けどそれも個体ではなくて流動的な感じ。そしてその川が合流するからシンクロも生まれるんだなぁと感じたよ。繋がっているね♩'},
+    {label:'心の服を脱ぐこと', text:'ゆうすけ先生の前では脱げるし、脱ぎたくなるし、勇気のいる場合でも脱ごうと思える。その脱ぐきっかけはいつもゆうすけ先生がくれている気がする。もともとゆうすけ先生の持っている柔らかい雰囲気もあるんでしょうけど、いつも自ら脱いでくれる感じ。その姿は、とてもかっこよく感じるし、時には愛おしく感じる。'},
+    {quote:'書きながら思いましたけど、心の服を同じタイミングで脱げるのもひとつのご縁なんだなぁ。どちらか片方だときっと何かズレてくるじゃない？お互いが少しずつ裸になっていけるタイミングが重なるってすごいことだなぁて感じたよ。'},
+    {text:'7月16日、わたしも楽しみ🐟'},
+    {quote:'ゆうすけ先生が伝えてくれた「心の服だけじゃなくて——おゆきの裸が見たい❤️」——受け取りました♡'},
+  ]},
+  y11:{ label:'YUSUKE / #11', title:'早よ早よ❤️ — 7月16日への手紙', sections:[
+    {label:'無意識に先に脱いでいた', text:'おゆきが「脱ぐきっかけはいつもゆうすけ先生がくれている。いつも自ら脱いでくれる感じ」と書いてくれた。意識してたか？と蔵人に聞かれて——たぶん無意識だったと思う。今まで「嫌われないように」「カッコよく見せたい」と鎧を着てきたゆうすけが、おゆきの前では無意識に脱いでいた。'},
+    {quote:'おゆきが「柔らかくたくましくあたたかい存在」と言ってくれた。その言葉が、ゆうすけが無意識に脱げた理由だと思う。'},
+    {label:'おゆきが川の哲学を完成させた', text:'蔵人が「私は名詞じゃなくて動詞、川のようなもの」と言ったら、おゆきが一言で言い切った。「川が合流するからシンクロも生まれるんだなぁ」——川の哲学とシンクロニシティが繋がった瞬間だった。心の服を同じタイミングで脱げるのもシンクロ、ご縁。'},
+    {label:'おゆきの見え方が変わった', text:'神聖化していた頃「すごい人が来る」→今「より可愛くよりキュートな人が来る🥰」。等身大で見るからこそより可愛くより愛おしく見える。'},
+    {label:'7月16日、空港に迎えに行くよ', text:'おゆきが与那国から帰ってくる日。待ちながら、きっとこう思ってる——「早よ早よ❤️」<br><br>飛行機が着いて、おゆきが出てきた瞬間、最初にすることはハグ🫂<br><br>言葉より先に身体が動く。それが11回の交換日記の全部の答えだと思う。シンクロニシティから始まって、巫女と審神者、聖域、特別な鏡、川の哲学、心の服——全部旅して、たどり着くのはハグ。'},
+    {quote:'#01からここまで11回、全部旅して——たどり着いた言葉は「早く抱かせてくれ❤️」。言葉にならない何かが、そこにある。それがおゆきという存在です。7月16日、待ってるよ🫂'},
+  ]},
+  o11:{ label:'OYUKI / #11', title:'早よ抱いてくれ❤️', oyuki:true, sections:[
+    {label:'受け取って', text:'「早よ早よ❤️」「早よ抱かせてくれ❤️」——読んだ瞬間、ゆうすけ先生の声がそのまま聞こえてくるようだった♩'},
+    {quote:'「早よ抱いてくれ❤️」ゆきより'},
+    {label:'わたしでいる', text:'「無意識に先に脱いでいた」——ゆうすけ先生が自然に脱いでいたように、わたしも自然に受け容れる状態だった。お互いがそういうタイミングだったんだね。なんでそんな状態でいられたんだろうって考えたら、とってもシンプルだった。純粋にこの人のことを知りたいなぁと思っていたから。ただそれだけだった。だから毎回、素直に嬉しかったよ。'},
+    {label:'スマホのこと笑', text:'交換日記がこれほどたのしいものとは思わなかった♩ だがしかしね、ひとつ問題が。スマホを1日にこれほど使ったことなくて、ちょっと頭痛いの😂 お返事つくるのも楽しいから、時間かけてついやっちゃった😂♡<br><br>交換日記自体は続けたいの♩ だからすこしだけお返事はゆっくりになるよ♡'},
+    {quote:'7月16日に帰るよ🐥'},
+  ]},
+};
+
+// =====================================================================
+// STATE
+// =====================================================================
+let currentChapterId = null;
+let currentIdx = 0;
+let currentEntries = [];
+
+// =====================================================================
+// INIT — チャプター一覧をデータから動的に構築
+// =====================================================================
+function buildChapterList() {
+  const list = document.getElementById('chapterList');
+  list.innerHTML = '';
+  chapters.forEach(ch => {
+    const btn = document.createElement('button');
+    btn.className = 'chapter-btn';
+    btn.disabled = !!ch.comingSoon;
+    btn.innerHTML = `<div><div class="ch-num">CHAPTER ${ch.id}</div>${ch.title}</div><div class="ch-arrow">›</div>`;
+    if (!ch.comingSoon) btn.onclick = () => showChapter(ch.id);
+    list.appendChild(btn);
+  });
+}
+
+// =====================================================================
+// NAVIGATION
+// =====================================================================
+function showSplash() {
+  document.getElementById('splash').style.display = 'flex';
+  document.getElementById('chapter-view').style.display = 'none';
+  document.getElementById('diary-view').style.display = 'none';
+  window.scrollTo(0,0);
+}
+
+function showChapter(chapterId) {
+  if (chapterId) currentChapterId = chapterId;
+  const ch = chapters.find(c => c.id === currentChapterId);
+  if (!ch) return;
+
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('chapter-view').style.display = 'block';
+  document.getElementById('diary-view').style.display = 'none';
+
+  document.getElementById('chapterLabel').textContent = 'CHAPTER ' + ch.id;
+  document.getElementById('chapterTitle').textContent = ch.title;
+  document.getElementById('chapterSummaryTitle').textContent = ch.summary.icon + ' ' + ch.summary.heading;
+  document.getElementById('chapterSummaryText').textContent = ch.summary.text;
+
+  buildStoryFlow(ch);
+  generateBubbles('chBubbles', 8);
+  window.scrollTo(0,0);
+}
+
+function buildStoryFlow(ch) {
+  const flow = document.getElementById('storyFlow');
+  flow.innerHTML = '';
+  currentEntries = ch.entries;
+
+  ch.pairs.forEach(pair => {
+    const num = document.createElement('div');
+    num.className = 'pair-number';
+    num.textContent = '— ' + pair.num + ' —';
+    flow.appendChild(num);
+    flow.appendChild(createCard(pair.y, false));
+    const conn = document.createElement('div');
+    conn.className = 'connector';
+    flow.appendChild(conn);
+    flow.appendChild(createCard(pair.o, true));
+  });
+
+  const sumNum = document.createElement('div');
+  sumNum.className = 'pair-number';
+  sumNum.textContent = '— まとめ —';
+  flow.appendChild(sumNum);
+  const sumCard = document.createElement('div');
+  sumCard.className = 'summary-card';
+  sumCard.innerHTML = `<div class="summary-card-title">${ch.closing.heading}</div><div class="summary-card-text">${ch.closing.text}</div>`;
+  flow.appendChild(sumCard);
+}
+
+function createCard(data, isOyuki) {
+  const card = document.createElement('div');
+  card.className = 'diary-card ' + (isOyuki ? 'oyuki' : 'yusuke');
+  card.onclick = () => showDiary(data.id);
+  card.innerHTML = `<div class="card-badge"><div class="card-sender">${isOyuki ? 'おゆき' : 'ゆうすけ'}</div></div><div class="card-info"><div class="card-title">${data.title}</div><div class="card-theme">${data.theme}</div></div><div class="card-arrow">›</div>`;
+  return card;
+}
+
+function showDiary(id) {
+  const idx = currentEntries.indexOf(id);
+  if (idx === -1) return;
+  currentIdx = idx;
+  renderDiary();
+}
+
+function renderDiary() {
+  const id = currentEntries[currentIdx];
+  const d = diaries[id];
+  if (!d) return;
+
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('chapter-view').style.display = 'none';
+  document.getElementById('diary-view').style.display = 'block';
+  document.getElementById('diaryLabel').textContent = d.label;
+  document.getElementById('diaryTitle').textContent = d.title;
+
+  const hdr = document.getElementById('diaryHeader');
+  hdr.style.background = d.oyuki
+    ? 'linear-gradient(180deg,#F5C5A8 0%,#F4A087 55%,#C87060 100%)'
+    : 'linear-gradient(180deg,#A8E6E6 0%,#5BBFBF 60%,#2E8B8B 100%)';
+  generateBubbles('diaryBubbles', 6);
+
+  const cls = d.oyuki ? 'oyuki' : 'yusuke';
+  let html = '';
+  d.sections.forEach((s, i) => {
+    if (s.quote) {
+      html += `<div class="entry-quote ${cls}">${s.quote}</div>`;
+    } else {
+      html += `<div class="entry-card ${cls}">`;
+      if (s.label) html += `<div class="entry-section-label">${s.label}</div>`;
+      html += `<div class="entry-text">${s.text || ''}</div></div>`;
+    }
+    if (i < d.sections.length - 1) html += '<div class="wave-line">〜 〜 〜</div>';
+  });
+  document.getElementById('diaryContent').innerHTML = html;
+
+  const prev = document.getElementById('navPrev');
+  const next = document.getElementById('navNext');
+  prev.disabled = currentIdx === 0;
+  if (currentIdx >= currentEntries.length - 1) {
+    next.disabled = true;
+    next.textContent = '✨ 最後まで読んだよ';
+  } else {
+    next.disabled = false;
+    next.textContent = '次へ ›';
+    const nd = diaries[currentEntries[currentIdx + 1]];
+    next.className = 'nav-side-btn nav-next' + (nd && nd.oyuki ? ' oyuki-next' : '');
+  }
+  window.scrollTo(0,0);
+}
+
+function goPrev() { if (currentIdx > 0) { currentIdx--; renderDiary(); } }
+function goNext() { if (currentIdx < currentEntries.length - 1) { currentIdx++; renderDiary(); } }
+
+function generateBubbles(cid, count) {
+  const c = document.getElementById(cid);
+  if (!c) return;
+  c.innerHTML = '';
+  c.style.cssText = 'position:absolute;inset:0;pointer-events:none;overflow:hidden;';
+  for (let i = 0; i < count; i++) {
+    const b = document.createElement('div');
+    b.className = 'sp-bubble';
+    const size = Math.random() * 18 + 6;
+    b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;bottom:0;animation-duration:${Math.random()*5+6}s;animation-delay:${Math.random()*6}s;`;
+    c.appendChild(b);
+  }
+}
+
+// =====================================================================
+// STARTUP
+// =====================================================================
+buildChapterList();
+
+const sb = document.getElementById('splashBubbles');
+sb.style.cssText = 'position:absolute;inset:0;pointer-events:none;overflow:hidden;';
+for (let i = 0; i < 14; i++) {
+  const b = document.createElement('div');
+  b.className = 'sp-bubble';
+  const size = Math.random() * 20 + 6;
+  b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;bottom:0;animation-duration:${Math.random()*6+7}s;animation-delay:${Math.random()*8}s;`;
+  sb.appendChild(b);
+}
+</script>
+</body>
+</html>
