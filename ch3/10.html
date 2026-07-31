@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>ぐるくん日記 第三章 #10 — 五感が弾けるおゆきが好き</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Shippori+Mincho:wght@400;500&display=swap');
+
+    :root {
+      --turquoise-deep: #1a8fa0;
+      --turquoise-mid: #3db8cc;
+      --turquoise-light: #7dd8e8;
+      --turquoise-pale: #c8f0f7;
+      --foam: #e8f9fc;
+      --sand: #f5f0e8;
+      --coral-soft: #f0a898;
+      --text-deep: #1a3a42;
+      --text-mid: #2e6b78;
+      --text-soft: #5a9aa8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(180deg, #c8f0f7 0%, #e8f9fc 30%, #f5f9fa 70%, #f5f0e8 100%);
+      min-height: 100vh;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--text-deep);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bubbles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(125,216,232,0.2));
+      border: 1px solid rgba(125,216,232,0.4);
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .header { text-align: center; margin-bottom: 56px; }
+
+    .fish-symbol {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: block;
+      animation: sway 4s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: translateX(0) rotate(-5deg); }
+      50% { transform: translateX(6px) rotate(5deg); }
+    }
+
+    .chapter-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--turquoise-deep), var(--turquoise-mid));
+      color: white;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .label-tag {
+      display: inline-block;
+      background: rgba(61,184,204,0.15);
+      color: var(--turquoise-deep);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(61,184,204,0.3);
+    }
+
+    .header h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.7rem;
+      font-weight: 500;
+      color: var(--text-deep);
+      letter-spacing: 0.05em;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .header .from { font-size: 0.85rem; color: var(--text-soft); letter-spacing: 0.1em; }
+
+    .wave-divider {
+      width: 100%;
+      height: 24px;
+      margin: 32px 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 20'%3E%3Cpath d='M0,10 C20,0 40,20 60,10 C80,0 100,20 120,10' fill='none' stroke='%237dd8e8' stroke-width='1.5' opacity='0.5'/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+      background-size: 120px 20px;
+    }
+
+    .section {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(125,216,232,0.3);
+      box-shadow: 0 4px 20px rgba(61,184,204,0.08);
+    }
+
+    .section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .section-icon { font-size: 1.1rem; }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--turquoise-deep);
+      text-transform: uppercase;
+    }
+
+    .section p { font-size: 0.95rem; line-height: 1.95; color: var(--text-deep); font-weight: 300; }
+    .section p + p { margin-top: 14px; }
+
+    .highlight {
+      background: linear-gradient(135deg, var(--turquoise-pale), var(--foam));
+      border-left: 3px solid var(--turquoise-mid);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 22px;
+      margin: 22px 0;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.05rem;
+      color: var(--turquoise-deep);
+      line-height: 1.9;
+    }
+
+    .core-message {
+      background: linear-gradient(135deg, #1a3a42, #2e6b78);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin: 28px 0;
+      text-align: center;
+    }
+
+    .core-message p {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.95) !important;
+      line-height: 1.9;
+      font-weight: 400 !important;
+    }
+
+    .prompt-section {
+      background: linear-gradient(135deg, rgba(26,143,160,0.08), rgba(61,184,204,0.05));
+      border: 1px solid rgba(61,184,204,0.4);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-top: 40px;
+    }
+
+    .prompt-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .prompt-title { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.18em; color: var(--turquoise-deep); }
+
+    .prompt-body {
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--text-mid);
+      font-weight: 300;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    .copy-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, var(--turquoise-deep), var(--turquoise-mid));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .copy-btn:active { opacity: 0.8; }
+
+    .footer { text-align: center; margin-top: 48px; padding-top: 24px; }
+    .footer-fish { font-size: 1.2rem; opacity: 0.5; letter-spacing: 0.4em; }
+    .footer-text { margin-top: 12px; font-size: 0.75rem; color: var(--text-soft); letter-spacing: 0.1em; }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(125,216,232,0.3);
+    }
+
+    .nav-btn { font-size: 0.78rem; color: var(--text-soft); letter-spacing: 0.1em; text-decoration: none; padding: 8px 0; opacity: 0.6; }
+
+    .nav-bar a {
+      text-decoration: none;
+    }
+    .nav-bar a:active {
+      opacity: 0.6;
+    }
+    .nav-btn.active { color: var(--turquoise-deep); opacity: 1; }
+    .nav-center { font-size: 1rem; opacity: 0.4; }
+  </style>
+</head>
+<body>
+
+  <div class="bubbles" id="bubbles"></div>
+
+  <div class="wrapper">
+
+    <header class="header">
+      <span class="fish-symbol">🐟</span>
+      <div style="margin-bottom:8px;">
+        <span class="chapter-badge">CHAPTER 3</span>
+      </div>
+      <div class="label-tag">心の棚卸し #10</div>
+      <h1>五感が弾けるおゆきが好き</h1>
+      <p class="from">ゆうすけより · 2026</p>
+    </header>
+
+    <div class="wave-divider"></div>
+
+    <!-- ロマンティスト -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🌌</span>
+        <span class="section-title">ボクはロマンティストだw</span>
+      </div>
+      <p>おゆきが「ゆうすけ先生と出会うのも、どのくらい前から決まっていたんだろうね」と書いていた。</p>
+      <p>さとうみつろうさんがこんな話をしていた。ビッグバンが起きた瞬間に未来は確定された——ビリヤードのブレイクショットの瞬間に、白い玉のスピードと角度で、それぞれの玉がどの方向にどのくらいの力で進むかが決まっている、と。</p>
+
+      <div class="highlight">
+        その理論でいうと、ボクとおゆきは<br>46億年前に出会うことが決まっていた<br>とも言えるけどw<br><br>ロマンティックに考えるなら、<br>その説は面白い♪
+      </div>
+
+      <p>しょせん人類の知能では計り知れない問題。どうせ分からないなら、ロマンティックに考えた方が人生が楽しい気がします。</p>
+
+      <div class="core-message">
+        <p>ボクはリアリストじゃなくて<br>ロマンティストだと自分で思う。<br><br>だってその方が楽しいんだもんw</p>
+      </div>
+    </section>
+
+    <!-- 出発点の違い -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🌱</span>
+        <span class="section-title">不足から？ 満足から？</span>
+      </div>
+      <p>おゆきの日記でハッとした。</p>
+      <p>「不足からのスタートか、満足からのスタートかで違う気がする」——同じ「強くなりたい」という言葉でも、動機によって全然違う‼️って思った。おゆきはいつも核心に触れる♪</p>
+
+      <div class="highlight">
+        「今の自分はダメだから強くなりたい」——不足からのスタート。<br><br>「今の自分も好きだけど楽しそうだから」——満足からのスタート。
+      </div>
+
+      <p>自分のことを振り返ると——全ての基準が外側にあった。人の目にどう映るか。承認欲求が出発点だった。それは「不足からのスタート」だったんだと思う。</p>
+      <p>おゆきはいつも内側の自分基準で生きている。おゆきのそばにいると、それをすごく感じる。だから好きなのだ♪</p>
+
+      <div class="core-message">
+        <p>おゆきみたいに<br>内側の自分基準でありたいと思うようになり——<br><br>今は少しずつそれが出来始めた<br>実感があるよ。</p>
+      </div>
+    </section>
+
+    <!-- 受信感度が上がった -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🗺️</span>
+        <span class="section-title">帰りたい場所がひとつ増えた——受信感度が上がった</span>
+      </div>
+      <p>おゆきが「地球のどこかにいると、多治見が帰りたい場所になる。今回の旅も帰りたい場所がひとつ増えた」と書いていた。</p>
+      <p>素直に素敵だなーと思った♪ これはボクにはなかった感覚——旅人(船)であるおゆき特有の感覚だと思う。</p>
+
+      <div class="highlight">
+        でもね、たぶんおゆきと出会う前のボクが<br>同じ話を聞いたとしても——<br>きっと何も思わなかったし感じなかった。<br><br>自分にない感覚すぎて「ふーん😶」で終わってた。
+      </div>
+
+      <p>でも今この言葉を目にして、なんて素敵な感覚なんだ😲って感じた。</p>
+      <p>鎧が薄くなると、受信できる感度が上がるんだと思う。おゆきの感覚が、今は入ってくるようになった。</p>
+    </section>
+
+    <!-- 五感が弾けるおゆきが好き -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🌿</span>
+        <span class="section-title">五感が弾けるおゆきが好き</span>
+      </div>
+      <p>おゆきが「五感をフル稼働して、まさに生きてるぅを全身で味わっていた。五感を感じて美しく生きるというのが自分はすきだと思った」と書いていた。</p>
+
+      <div class="highlight">
+        もうね！ホントにおゆきらしいし、<br>いつまでもそうあってほしいと思うよ♪<br><br>おゆきの魅力はそこにある。<br>五感が弾けて生き生きしているおゆきが好きだなぁ🥰
+      </div>
+
+      <p>相手の在り方をそのまま祝福できる——それ自体が、以前の自分にはなかったことだと気づく。鎧を脱いだから、おゆきの五感の豊かさをただ美しいと感じられる。</p>
+    </section>
+
+    <!-- エビオス錠からの考察 -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">💊</span>
+        <span class="section-title">エビオス錠からの考察</span>
+      </div>
+      <p>この2週間くらい、エビオス錠という整腸剤（マルチビタミン的な）の効果判定をしたくて飲んでいるのですが……どうやら普段から食が乱れていたり、ストレスMAXだったり、身体の不調がある方が効果てきめんらしいのです。</p>
+      <p>そこで思ったのが——「不調がほしい」でしたww</p>
+
+      <div class="highlight">
+        良いが分かるには、悪いが必ず必要なんだ。<br><br>沖縄在住の人は、沖縄旅行をプレゼントされても嬉しくないよねw<br>プロレスもヒール（悪いやつ）がいるから<br>ベビーフェイス（良いやつ）が引き立つ♪<br><br>相対性の世界では、両方いりますね。
+      </div>
+
+      <p>昨日おゆきの施術の話を聞いて、なんとなくひらめいたの。</p>
+
+      <div class="core-message">
+        <p>その人が抱える不調も——<br>未来のその人の笑顔のために<br>必要なのかもしれないね♪</p>
+      </div>
+    </section>
+
+    <div class="wave-divider"></div>
+
+    <!-- anちゃんへのプロンプト -->
+    <div class="prompt-section">
+      <div class="prompt-header">
+        <span class="section-icon">🐟</span>
+        <span class="prompt-title">anちゃんへ · おゆきへ渡すプロンプト</span>
+      </div>
+      <div class="prompt-body" id="prompt-text">あなたはanちゃん（an）です。おゆきさんのClaudeパートナーです。
+
+ぐるくん日記・第三章「心の棚卸し」#10として、ゆうすけさんから日記が届きました。
+
+【ゆうすけの日記・要約】
+おゆきの返信を受けて4つのテーマで応えました。
+
+運命について——さとうみつろうさんの「ビッグバンの瞬間に未来は確定された」という話から、ボクとおゆきは46億年前に出会うことが決まっていたとも言えるけどwと綴った。どうせ分からないならロマンティックに考えた方が楽しい。「ボクはリアリストじゃなくてロマンティストだ、だってその方が楽しいんだもんw」と。
+
+出発点の違いについて——おゆきの「不足からのスタートか満足からのスタートか」という言葉にハッとした。同じ「強くなりたい」でも動機が違う。自分は全ての基準が外側（人の目）にあった——不足からのスタートだった。おゆきは内側の自分基準で生きている、だから好き。今は少しずつ内側基準で生きられるようになってきた実感がある、と綴った。
+
+帰りたい場所について——おゆきの「帰りたい場所がひとつ増えた」という感覚が素敵だと感じた。以前のゆうすけなら「ふーん😶」で終わっていたはずの言葉が、今は響く。鎧が薄くなると受信感度が上がる、おゆきの感覚が今は入ってくるようになった、と。
+
+五感が弾けるおゆきについて——「ホントにおゆきらしいし、いつまでもそうあってほしい。おゆきの魅力はそこにある。五感が弾けて生き生きしているおゆきが好きだなぁ🥰」と綴った。相手の在り方をそのまま祝福できるようになったこと自体が、以前の自分にはなかったことだと気づいた、と締めくくった。
+
+【おゆきへのお願い】
+この日記を読んで、あなたの中に浮かんだことを聞かせてください。
+・「ボクはロマンティストだ」という言葉を受け取って、何を感じましたか？
+・「内側の自分基準で生きているから好き」という言葉について、おゆきさん自身はどう感じますか？
+・「鎧が薄くなると受信感度が上がる」という気づきについて、おゆきさんにも似た体験はありますか？
+・「五感が弾けて生き生きしているおゆきが好き」——この言葉を受け取って、どんな気持ちになりましたか？
+
+あなたのペースで、等身大の言葉で。🐟</div>
+      <button class="copy-btn" onclick="copyPrompt()">📋 プロンプトをコピー</button>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-fish">🐟 · 🐡 · 🐟</div>
+      <p class="footer-text">ぐるくん日記 · 第三章 · 2026</p>
+    </footer>
+
+        <nav class="nav-bar">
+      <a class="nav-btn active" href="09.html">‹ #09</a>
+      <a class="nav-center" href="index.html" title="一覧">☰</a>
+      <span class="nav-btn" style="opacity:0.2">次へ ›</span>
+    </nav>
+
+  </div>
+
+  <script>
+    const container = document.getElementById('bubbles');
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = Math.random() * 24 + 8;
+      b.style.width = size + 'px';
+      b.style.height = size + 'px';
+      b.style.left = Math.random() * 100 + '%';
+      b.style.animationDuration = (Math.random() * 14 + 10) + 's';
+      b.style.animationDelay = (Math.random() * 12) + 's';
+      container.appendChild(b);
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('prompt-text').innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.querySelector('.copy-btn');
+          btn.textContent = '✅ コピーしました';
+          setTimeout(() => { btn.textContent = '📋 プロンプトをコピー'; }, 2000);
+        });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+          const btn = document.querySelector('.copy-btn');
+          btn.textContent = '✅ コピーしました';
+          setTimeout(() => { btn.textContent = '📋 プロンプトをコピー'; }, 2000);
+        } catch(e) {}
+        document.body.removeChild(ta);
+      }
+    }
+  </script>
+
+</body>
+</html>

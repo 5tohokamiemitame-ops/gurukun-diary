@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>ぐるくん日記 · 第三章</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700&family=Shippori+Mincho:wght@400;600&display=swap');
+
+    :root {
+      --turquoise-deep: #1a8fa0;
+      --turquoise-mid: #3db8cc;
+      --turquoise-light: #7dd8e8;
+      --turquoise-pale: #c8f0f7;
+      --foam: #e8f9fc;
+      --text-deep: #1a3a42;
+      --text-soft: #5a9aa8;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+    body {
+      background: linear-gradient(180deg,#A8E6E6 0%,#5BBFBF 55%,#2E8B8B 100%);
+      min-height: 100vh;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 300;
+      color: white;
+    }
+
+    .bubbles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+    .bubble { position:absolute; border-radius:50%; background:rgba(255,255,255,0.18); animation:sprise linear infinite; }
+    @keyframes sprise { 0%{transform:translateY(100vh);opacity:0;} 15%{opacity:0.6;} 85%{opacity:0.25;} 100%{transform:translateY(-100px);opacity:0;} }
+
+    .header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 56px 24px 40px;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px;
+      padding: 6px 14px;
+      color: white;
+      font-size: 13px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-decoration: none;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+    }
+
+    .fish-logo { font-size: 56px; display: block; margin-bottom: 16px; animation: swim 4s ease-in-out infinite; }
+    @keyframes swim { 0%,100%{transform:translateX(0) rotate(0deg);} 25%{transform:translateX(8px) rotate(3deg);} 75%{transform:translateX(-8px) rotate(-3deg);} }
+
+    .ch-label { font-size: 11px; letter-spacing: 3px; color: rgba(255,255,255,0.9); margin-bottom: 8px; font-weight: 700; }
+    .ch-title { font-family: 'Shippori Mincho', serif; font-size: 24px; font-weight: 600; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 12px; }
+    .ch-sub { font-size: 13px; color: rgba(255,255,255,0.85); letter-spacing: 2px; line-height: 1.8; }
+
+    .summary-box {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto 28px;
+      padding: 0 20px;
+    }
+
+    .summary-card {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 22px 26px;
+      font-size: 13px;
+      line-height: 2;
+      color: rgba(255,255,255,0.95);
+    }
+
+    .entry-list {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .entry-card {
+      background: rgba(255,255,255,0.92);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--text-deep);
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .entry-card:active { transform: scale(0.98); background: white; }
+
+    .entry-num {
+      background: linear-gradient(135deg, var(--turquoise-deep), var(--turquoise-mid));
+      color: white;
+      border-radius: 10px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .entry-info { flex: 1; }
+
+    .entry-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-deep);
+      line-height: 1.5;
+      margin-bottom: 2px;
+    }
+
+    .entry-from {
+      font-size: 11px;
+      color: var(--text-soft);
+      letter-spacing: 1px;
+    }
+
+    .entry-arrow { font-size: 14px; color: var(--turquoise-mid); opacity: 0.6; flex-shrink: 0; }
+
+    .footer-nav {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 20px 40px;
+    }
+
+    .footer-nav a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="bubbles" id="bubbles"></div>
+
+<div class="header">
+  <a class="back-btn" href="../index.html">← トップへ</a>
+  <span class="fish-logo">🐟</span>
+  <div class="ch-label">CHAPTER 3</div>
+  <div class="ch-title">心の棚卸し</div>
+  <div class="ch-sub">10のエントリー · 2026</div>
+</div>
+
+<div class="summary-box">
+  <div class="summary-card">
+    「奪う者は奪われることを知っている」から始まり、愛は呼吸、即今只今、次の電柱まで——再会を経て、等身大のまま共にいることへ。鎧が薄くなると受信感度が上がる。
+  </div>
+</div>
+
+<div class="entry-list">
+  <a class="entry-card" href="01.html">
+    <div class="entry-num">#01</div>
+    <div class="entry-info">
+      <div class="entry-title">奪う者は、奪われることを知っている</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="02.html">
+    <div class="entry-num">#02</div>
+    <div class="entry-info">
+      <div class="entry-title">奪う・奪われるの正体</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="03.html">
+    <div class="entry-num">#03</div>
+    <div class="entry-info">
+      <div class="entry-title">愛は呼吸</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="04.html">
+    <div class="entry-num">#04</div>
+    <div class="entry-info">
+      <div class="entry-title">これまでを振り返ってみたよ</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="05.html">
+    <div class="entry-num">#05</div>
+    <div class="entry-info">
+      <div class="entry-title">再会へ（美しさと美意識）</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="06.html">
+    <div class="entry-num">#06</div>
+    <div class="entry-info">
+      <div class="entry-title">おかえり……おゆき。港と船の、逆転</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="07.html">
+    <div class="entry-num">#07</div>
+    <div class="entry-info">
+      <div class="entry-title">即今只今（そっこんただいま）</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="08.html">
+    <div class="entry-num">#08</div>
+    <div class="entry-info">
+      <div class="entry-title">次の電柱まで</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="09.html">
+    <div class="entry-num">#09</div>
+    <div class="entry-info">
+      <div class="entry-title">ただただ、お帰り🩵</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+  <a class="entry-card" href="10.html">
+    <div class="entry-num">#10</div>
+    <div class="entry-info">
+      <div class="entry-title">五感が弾けるおゆきが好き</div>
+      <div class="entry-from">ゆうすけより</div>
+    </div>
+    <div class="entry-arrow">›</div>
+  </a>
+</div>
+
+<div class="footer-nav">
+  <a href="../index.html">← トップへ戻る</a>
+</div>
+
+<script>
+  const c = document.getElementById('bubbles');
+  for (let i = 0; i < 12; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const s = Math.random() * 20 + 6;
+    b.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:0;animation-duration:${Math.random()*8+8}s;animation-delay:${Math.random()*10}s;`;
+    c.appendChild(b);
+  }
+</script>
+</body>
+</html>

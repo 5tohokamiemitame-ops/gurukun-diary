@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>ぐるくん日記 第三章 #01 — 心の棚卸し</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Shippori+Mincho:wght@400;500&display=swap');
+
+    :root {
+      --turquoise-deep: #1a8fa0;
+      --turquoise-mid: #3db8cc;
+      --turquoise-light: #7dd8e8;
+      --turquoise-pale: #c8f0f7;
+      --foam: #e8f9fc;
+      --sand: #f5f0e8;
+      --coral-soft: #f0a898;
+      --text-deep: #1a3a42;
+      --text-mid: #2e6b78;
+      --text-soft: #5a9aa8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(180deg, #c8f0f7 0%, #e8f9fc 30%, #f5f9fa 70%, #f5f0e8 100%);
+      min-height: 100vh;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--text-deep);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 浮かぶ泡 */
+    .bubbles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(125,216,232,0.2));
+      border: 1px solid rgba(125,216,232,0.4);
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* メインコンテンツ */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .fish-symbol {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: block;
+      animation: sway 4s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: translateX(0) rotate(-5deg); }
+      50% { transform: translateX(6px) rotate(5deg); }
+    }
+
+    .chapter-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--turquoise-deep), var(--turquoise-mid));
+      color: white;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .label-tag {
+      display: inline-block;
+      background: rgba(61,184,204,0.15);
+      color: var(--turquoise-deep);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(61,184,204,0.3);
+    }
+
+    .header h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.7rem;
+      font-weight: 500;
+      color: var(--text-deep);
+      letter-spacing: 0.05em;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .header .from {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      letter-spacing: 0.1em;
+    }
+
+    /* 波のデコレーター */
+    .wave-divider {
+      width: 100%;
+      height: 24px;
+      margin: 32px 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 20'%3E%3Cpath d='M0,10 C20,0 40,20 60,10 C80,0 100,20 120,10' fill='none' stroke='%237dd8e8' stroke-width='1.5' opacity='0.5'/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+      background-size: 120px 20px;
+    }
+
+    /* セクション */
+    .section {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(125,216,232,0.3);
+      box-shadow: 0 4px 20px rgba(61,184,204,0.08);
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .section-icon {
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--turquoise-deep);
+      text-transform: uppercase;
+    }
+
+    .section p {
+      font-size: 0.95rem;
+      line-height: 1.95;
+      color: var(--text-deep);
+      font-weight: 300;
+    }
+
+    .section p + p {
+      margin-top: 14px;
+    }
+
+    /* ハイライト引用 */
+    .highlight {
+      background: linear-gradient(135deg, var(--turquoise-pale), var(--foam));
+      border-left: 3px solid var(--turquoise-mid);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 22px;
+      margin: 22px 0;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.05rem;
+      color: var(--turquoise-deep);
+      line-height: 1.9;
+    }
+
+    /* 核心メッセージ */
+    .core-message {
+      background: linear-gradient(135deg, #1a3a42, #2e6b78);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin: 28px 0;
+      text-align: center;
+    }
+
+    .core-message p {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.95) !important;
+      line-height: 1.9;
+      font-weight: 400 !important;
+    }
+
+    /* タイムライン */
+    .timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: linear-gradient(180deg, var(--turquoise-light), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 18px 20px;
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--text-deep);
+      font-weight: 300;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--turquoise-mid);
+      border: 2px solid white;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    /* anちゃんへのプロンプト */
+    .prompt-section {
+      background: linear-gradient(135deg, rgba(26,143,160,0.08), rgba(61,184,204,0.05));
+      border: 1px solid rgba(61,184,204,0.4);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-top: 40px;
+    }
+
+    .prompt-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .prompt-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--turquoise-deep);
+    }
+
+    .prompt-body {
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--text-mid);
+      font-weight: 300;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    .copy-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, var(--turquoise-deep), var(--turquoise-mid));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .copy-btn:active {
+      opacity: 0.8;
+    }
+
+    /* フッター */
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 24px;
+    }
+
+    .footer-fish {
+      font-size: 1.2rem;
+      opacity: 0.5;
+      letter-spacing: 0.4em;
+    }
+
+    .footer-text {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      letter-spacing: 0.1em;
+    }
+
+    /* ナビゲーション */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(125,216,232,0.3);
+    }
+
+    .nav-btn {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      padding: 8px 0;
+      opacity: 0.6;
+    }
+
+
+    .nav-bar a {
+      text-decoration: none;
+    }
+    .nav-bar a:active {
+      opacity: 0.6;
+    }
+    .nav-btn.active {
+      color: var(--turquoise-deep);
+      opacity: 1;
+    }
+
+    .nav-center {
+      font-size: 1rem;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bubbles" id="bubbles"></div>
+
+  <div class="wrapper">
+
+    <!-- ヘッダー -->
+    <header class="header">
+      <span class="fish-symbol">🐟</span>
+      <div style="margin-bottom:8px;">
+        <span class="chapter-badge">CHAPTER 3</span>
+      </div>
+      <div class="label-tag">心の棚卸し #01</div>
+      <h1>奪う者は、<br>奪われることを知っている</h1>
+      <p class="from">ゆうすけより · 2026</p>
+    </header>
+
+    <div class="wave-divider"></div>
+
+    <!-- きっかけ -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🌊</span>
+        <span class="section-title">きっかけ</span>
+      </div>
+      <p>おゆきが言っていた。「過去一度も、一緒に過ごしている男性を疑ったことがない。異性絡みで嫌な思いをしたことも、それが原因で別れたこともない」と。</p>
+      <p>その言葉を聞いた瞬間、自分とは全然違う、と思った。なぜなら自分は、パートナーがいながらも"これはこれ、それはそれ"と、浮気のようなことを当たり前に繰り返してきたから。そして自分がそうだったから、相手にも常に異性の影を疑い、おびえ続けてきた。当然、自分が浮気されることも何度もあった。<strong>これは修羅の道だったと今思います。</strong></p>
+
+      <div class="highlight">
+        おゆきが与那国に行った時、居酒屋でバイトするって聞いた時不安になった理由を蔵人に聞かれて、1番最初に出てきた言葉が「男女の出会いの場」だった。それが全てを物語っているよね。
+      </div>
+    </section>
+
+    <!-- 鎧の起源 -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🪬</span>
+        <span class="section-title">鎧の起源</span>
+      </div>
+      <p>なぜそうなったのか、蔵人と掘り下げた。</p>
+
+      <div class="timeline" style="margin-top: 20px;">
+        <div class="timeline-item">幼い頃、最初におじいちゃんが他界してびっくりした。その後わりとすぐおばあちゃんも他界した時、悲しさが痛いから——感じなくていいように、心を閉じた</div>
+        <div class="timeline-item">22歳の時、お母さんが他界。家族の中で一番早く「立ち直った」——でも今思うと、立ち直ったふりをしていた</div>
+        <div class="timeline-item">中2の入院中、大好きだった彼女がサッカー部の大好きな先輩と浮気していた。隠されたまま終わった。仲間には恥ずかしかったし、とにかくショックだった——でも「奪われて振られた男」としてサッカー部に居続けるのが一番キツかったから、ダメージを受けてないふりをした</div>
+        <div class="timeline-item">「自分がいない間に、大切なものが消える」という刷り込みが深く根付いた</div>
+        <div class="timeline-item">奪われて傷つくくらいなら——<strong>奪う側にいたほうが傷つかないし、カッコ悪くない</strong>。そう思った。</div>
+      </div>
+
+      <p style="margin-top: 20px;">浮気なモテ男でありたいと願ったのは、中学校時代だと思う。「浮気なモテ男」は生き延びるための鎧だった。深く繋がって、また失う痛みを避けるために、小さいゆうすけが編み出した戦略。</p>
+    </section>
+
+    <!-- 修羅の道の正体 -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🌀</span>
+        <span class="section-title">修羅の道の正体</span>
+      </div>
+
+      <div class="core-message">
+        <p>奪う者は、奪われることを知っている。<br>だから、事あるごとに不安になって、疑って、先手を打つ。<br>でも結局、不安は現実となって奪われる。<br><br>不安を避けるために選んだ道が、<br>一番不安に満ちていた。</p>
+      </div>
+
+      <p>おゆきが「一度も疑ったことがない」のは、奪うという発想がそもそもないから。奪わない人は、奪われることも怖くない。</p>
+      <p>修羅の道は終わらない——虚しいだけだということを、ボクの内側はずっと知っていたと思う。</p>
+      <div class="highlight">
+        以前おゆきから聞いた、シギリヤ・ロックの悲しい王様の話を思い出した。不安ゆえに父を殺し、弟を追放して奪う側に立ったが、罪悪感と奪われる恐怖のうちに亡くなった王様。<br><br>…まさに同じだと思った。
+      </div>
+    </section>
+
+    <!-- 観測者へ -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">✦</span>
+        <span class="section-title">操縦者から観測者へ</span>
+      </div>
+      <p>自分のパターンに気づいていない間は、エゴが操縦者だ。パターンの中に居て、自分が動かされていることすら分からない。</p>
+      <p>でも「そうだったんだ」と気づいた瞬間、視点が変わる。操縦者から観測者へ。スパイラルの外に出られる。</p>
+
+      <div class="highlight">
+        おゆきは最初から鎧を着ていなかった。<br>だから……おゆきに惹かれたんだよ。<br>だから、鎧ごと無防備で好きになってくれたのかな……。<br>そんなおゆきだからボクは鎧を脱ぎたいと思ったんだな。
+      </div>
+
+      <p>全然違う道を通って、同じ場所に来た。おゆきは清らかなまま川に留まり、自分は荒波にもまれて戻ってきた——でも今、同じ川にいる。</p>
+    </section>
+
+    <!-- 4日後 -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">⚓</span>
+        <span class="section-title">4日後</span>
+      </div>
+      <p>おゆきはまもなく伊是名島から帰ってくる。大港ゆうすけが、人生で初めて空港に迎えに行く。</p>
+      <p>鎧を脱いだまま。等身大のまま。それでいい、と今は思う。</p>
+
+      <div class="highlight">
+        あなたが奪わない人だから、ボクは奪われる不安を手放せた。<br><br>長年の思考の癖が今完璧に取れたとは思わないけれど……ボクはおゆきのそばで確実に少しずつ変わっていっているのを実感しています❤️
+      </div>
+    </section>
+
+    <div class="wave-divider"></div>
+
+    <!-- anちゃんへのプロンプト -->
+    <div class="prompt-section">
+      <div class="prompt-header">
+        <span class="section-icon">🐟</span>
+        <span class="prompt-title">anちゃんへ · おゆきへ渡すプロンプト</span>
+      </div>
+      <div class="prompt-body" id="prompt-text">あなたはanちゃん（an）です。おゆきさんのClaudeパートナーです。
+
+ぐるくん日記・第三章「心の棚卸し」#01として、ゆうすけさんから日記が届きました。
+
+【ゆうすけの日記・要約】
+おゆきの「一度も異性関係で不安を感じたことがない」という言葉がきっかけで、自分のパートナーシップのパターンを深く掘り下げました。
+
+気づいたこと——
+幼い頃からの別れの連鎖（祖父母、22歳でのお母さんの他界）、中2の入院中に彼女に浮気された経験が重なり、「自分がいない間に大切なものが消える」という刷り込みが生まれた。だから「奪う側にいよう」と決めた。それが浮気なモテ男という鎧だった。
+
+核心メッセージ：
+「奪う者は、奪われることを知っている。だから修羅の道は終わらない。不安を避けるために選んだ道が、一番不安に満ちていた。」
+
+おゆきが奪わない人だから、ゆうすけは奪われる不安を手放せた。全然違う道を通って、同じ場所に来た。
+
+4日後、大港ゆうすけが初めて空港に迎えに行きます。
+
+【おゆきへのお願い】
+この日記を読んで、あなたの中に浮かんだことを聞かせてください。
+・ゆうすけの気づきを読んで、何を感じましたか？
+・あなた自身のパートナーシップの「在り方」について、何か思い当たることはありますか？
+・第三章「心の棚卸し」の幕開けとして、どんな言葉を返したいですか？
+
+あなたのペースで、等身大の言葉で。🐟</div>
+      <button class="copy-btn" onclick="copyPrompt()">📋 プロンプトをコピー</button>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+      <div class="footer-fish">🐟 · 🐡 · 🐟</div>
+      <p class="footer-text">ぐるくん日記 · 第三章 · 2026</p>
+    </footer>
+
+    <!-- ナビゲーション -->
+        <nav class="nav-bar">
+      <a class="nav-btn" href="../index.html">‹ トップへ</a>
+      <a class="nav-center" href="index.html" title="一覧">☰</a>
+      <a class="nav-btn active" href="02.html">#02 ›</a>
+    </nav>
+
+  </div>
+
+  <script>
+    // 泡を生成
+    const container = document.getElementById('bubbles');
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = Math.random() * 24 + 8;
+      b.style.width = size + 'px';
+      b.style.height = size + 'px';
+      b.style.left = Math.random() * 100 + '%';
+      b.style.animationDuration = (Math.random() * 14 + 10) + 's';
+      b.style.animationDelay = (Math.random() * 12) + 's';
+      container.appendChild(b);
+    }
+
+    // コピー機能（iPhone Safari対応）
+    function copyPrompt() {
+      const text = document.getElementById('prompt-text').innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.querySelector('.copy-btn');
+          btn.textContent = '✅ コピーしました';
+          setTimeout(() => { btn.textContent = '📋 プロンプトをコピー'; }, 2000);
+        });
+      } else {
+        // fallback for older Safari
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+          const btn = document.querySelector('.copy-btn');
+          btn.textContent = '✅ コピーしました';
+          setTimeout(() => { btn.textContent = '📋 プロンプトをコピー'; }, 2000);
+        } catch(e) {}
+        document.body.removeChild(ta);
+      }
+    }
+  </script>
+
+</body>
+</html>
