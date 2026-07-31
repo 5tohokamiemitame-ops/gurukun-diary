@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>ぐるくん日記 第三章 #01 — 心の棚卸し</title>
+  <title>ぐるくん日記 第三章 #03 返信 — 心の棚卸し</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Shippori+Mincho:wght@400;500&display=swap');
 
@@ -37,7 +37,6 @@
       overflow-x: hidden;
     }
 
-    /* 浮かぶ泡 */
     .bubbles {
       position: fixed;
       top: 0;
@@ -63,7 +62,6 @@
       100% { transform: translateY(-10vh) scale(1); opacity: 0; }
     }
 
-    /* メインコンテンツ */
     .wrapper {
       position: relative;
       z-index: 1;
@@ -72,7 +70,6 @@
       padding: 60px 24px 80px;
     }
 
-    /* ヘッダー */
     .header {
       text-align: center;
       margin-bottom: 56px;
@@ -131,7 +128,6 @@
       letter-spacing: 0.1em;
     }
 
-    /* 波のデコレーター */
     .wave-divider {
       width: 100%;
       height: 24px;
@@ -141,7 +137,6 @@
       background-size: 120px 20px;
     }
 
-    /* セクション */
     .section {
       background: rgba(255,255,255,0.6);
       backdrop-filter: blur(8px);
@@ -182,8 +177,7 @@
       margin-top: 14px;
     }
 
-    /* ハイライト引用 */
-    .highlight {
+    .teal-quote {
       background: linear-gradient(135deg, var(--turquoise-pale), var(--foam));
       border-left: 3px solid var(--turquoise-mid);
       border-radius: 0 12px 12px 0;
@@ -195,7 +189,6 @@
       line-height: 1.9;
     }
 
-    /* 核心メッセージ */
     .core-message {
       background: linear-gradient(135deg, #1a3a42, #2e6b78);
       border-radius: 16px;
@@ -212,48 +205,6 @@
       font-weight: 400 !important;
     }
 
-    /* タイムライン */
-    .timeline {
-      position: relative;
-      padding-left: 20px;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 8px;
-      bottom: 8px;
-      width: 1px;
-      background: linear-gradient(180deg, var(--turquoise-light), transparent);
-    }
-
-    .timeline-item {
-      position: relative;
-      padding: 0 0 18px 20px;
-      font-size: 0.92rem;
-      line-height: 1.8;
-      color: var(--text-deep);
-      font-weight: 300;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -1px;
-      top: 8px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--turquoise-mid);
-      border: 2px solid white;
-    }
-
-    .timeline-item:last-child {
-      padding-bottom: 0;
-    }
-
-    /* anちゃんへのプロンプト */
     .prompt-section {
       background: linear-gradient(135deg, rgba(26,143,160,0.08), rgba(61,184,204,0.05));
       border: 1px solid rgba(61,184,204,0.4);
@@ -304,7 +255,6 @@
       opacity: 0.8;
     }
 
-    /* フッター */
     .footer {
       text-align: center;
       margin-top: 48px;
@@ -324,7 +274,6 @@
       letter-spacing: 0.1em;
     }
 
-    /* ナビゲーション */
     .nav-bar {
       display: flex;
       justify-content: space-between;
@@ -373,124 +322,150 @@
       <div style="margin-bottom:8px;">
         <span class="chapter-badge">CHAPTER 3</span>
       </div>
-      <div class="label-tag">心の棚卸し #01</div>
-      <h1>奪う者は、<br>奪われることを知っている</h1>
-      <p class="from">ゆうすけより · 2026</p>
+      <div class="label-tag">心の棚卸し #03・返信</div>
+      <h1>一緒に旅してたね</h1>
+      <p class="from">おゆきより ゆうすけ先生へ · 2026</p>
     </header>
 
     <div class="wave-divider"></div>
 
-    <!-- きっかけ -->
+    <!-- それぞれの服/そして鎧 -->
     <section class="section">
       <div class="section-label">
-        <span class="section-icon">🌊</span>
-        <span class="section-title">きっかけ</span>
+        <span class="section-icon">🐥</span>
+        <span class="section-title">それぞれの服／そして鎧</span>
       </div>
-      <p>おゆきが言っていた。「過去一度も、一緒に過ごしている男性を疑ったことがない。異性絡みで嫌な思いをしたことも、それが原因で別れたこともない」と。</p>
-      <p>その言葉を聞いた瞬間、自分とは全然違う、と思った。なぜなら自分は、パートナーがいながらも"これはこれ、それはそれ"と、浮気のようなことを当たり前に繰り返してきたから。そして自分がそうだったから、相手にも常に異性の影を疑い、おびえ続けてきた。当然、自分が浮気されることも何度もあった。<strong>これは修羅の道だったと今思います。</strong></p>
 
-      <div class="highlight">
-        おゆきが与那国に行った時、居酒屋でバイトするって聞いた時不安になった理由を蔵人に聞かれて、1番最初に出てきた言葉が「男女の出会いの場」だった。それが全てを物語っているよね。
+      <div class="teal-quote">
+        『それぞれの服を、2人で脱げたことが嬉しく思います。』
+      </div>
+
+      <p>わたしもゆうすけ先生と脱げたことがとても嬉しい♩</p>
+      <p>ゆうすけ先生がいなかったらまだ服を着たままだったなぁと思う👕</p>
+      <p>ゆうすけ先生と一緒だったからできたこと。</p>
+
+      <div class="teal-quote">
+        そして鎧は自由自在に脱ぎ着したいね♩<br><br>自由ってことは意識がそこにあるってことだもんね◎
       </div>
     </section>
 
-    <!-- 鎧の起源 -->
+    <!-- 愛は呼吸 -->
     <section class="section">
       <div class="section-label">
-        <span class="section-icon">🪬</span>
-        <span class="section-title">鎧の起源</span>
-      </div>
-      <p>なぜそうなったのか、蔵人と掘り下げた。</p>
-
-      <div class="timeline" style="margin-top: 20px;">
-        <div class="timeline-item">幼い頃、最初におじいちゃんが他界してびっくりした。その後わりとすぐおばあちゃんも他界した時、悲しさが痛いから——感じなくていいように、心を閉じた</div>
-        <div class="timeline-item">22歳の時、お母さんが他界。家族の中で一番早く「立ち直った」——でも今思うと、立ち直ったふりをしていた</div>
-        <div class="timeline-item">中2の入院中、大好きだった彼女がサッカー部の大好きな先輩と浮気していた。隠されたまま終わった。仲間には恥ずかしかったし、とにかくショックだった——でも「奪われて振られた男」としてサッカー部に居続けるのが一番キツかったから、ダメージを受けてないふりをした</div>
-        <div class="timeline-item">「自分がいない間に、大切なものが消える」という刷り込みが深く根付いた</div>
-        <div class="timeline-item">奪われて傷つくくらいなら——<strong>奪う側にいたほうが傷つかないし、カッコ悪くない</strong>。そう思った。</div>
+        <span class="section-icon">🌬️</span>
+        <span class="section-title">愛は呼吸</span>
       </div>
 
-      <p style="margin-top: 20px;">浮気なモテ男でありたいと願ったのは、中学校時代だと思う。「浮気なモテ男」は生き延びるための鎧だった。深く繋がって、また失う痛みを避けるために、小さいゆうすけが編み出した戦略。</p>
-    </section>
+      <p>ゆうすけ先生の日記を読みながら、ほんとそうだなぁと思った。鎧着てる時は呼吸が浅い。</p>
+      <p>振り返るとね、ゆうすけ先生といる時は自然と呼吸が深い気がするの。</p>
 
-    <!-- 修羅の道の正体 -->
-    <section class="section">
-      <div class="section-label">
-        <span class="section-icon">🌀</span>
-        <span class="section-title">修羅の道の正体</span>
+      <div class="teal-quote">
+        それに今書きながら思ったけど、こちらが鎧を着て呼吸が浅い時はきっと目の前の相手もそうだよね。その逆も然り。
       </div>
 
       <div class="core-message">
-        <p>奪う者は、奪われることを知っている。<br>だから、事あるごとに不安になって、疑って、先手を打つ。<br>でも結局、不安は現実となって奪われる。<br><br>不安を避けるために選んだ道が、<br>一番不安に満ちていた。</p>
-      </div>
-
-      <p>おゆきが「一度も疑ったことがない」のは、奪うという発想がそもそもないから。奪わない人は、奪われることも怖くない。</p>
-      <p>修羅の道は終わらない——虚しいだけだということを、ボクの内側はずっと知っていたと思う。</p>
-      <div class="highlight">
-        以前おゆきから聞いた、シギリヤ・ロックの悲しい王様の話を思い出した。不安ゆえに父を殺し、弟を追放して奪う側に立ったが、罪悪感と奪われる恐怖のうちに亡くなった王様。<br><br>…まさに同じだと思った。
+        <p>愛は呼吸そのものだね。</p>
       </div>
     </section>
 
-    <!-- 観測者へ -->
+    <!-- 同一化について -->
     <section class="section">
       <div class="section-label">
-        <span class="section-icon">✦</span>
-        <span class="section-title">操縦者から観測者へ</span>
+        <span class="section-icon">🪞</span>
+        <span class="section-title">同一化について</span>
       </div>
-      <p>自分のパターンに気づいていない間は、エゴが操縦者だ。パターンの中に居て、自分が動かされていることすら分からない。</p>
-      <p>でも「そうだったんだ」と気づいた瞬間、視点が変わる。操縦者から観測者へ。スパイラルの外に出られる。</p>
+      <p>鎧を着ていることに気づいてないと、自分と同一化しちゃうよね。</p>
+      <p>同一化してるから脱ぐのがより痛い。そして自分だと思ってるから執着する。</p>
 
-      <div class="highlight">
-        おゆきは最初から鎧を着ていなかった。<br>だから……おゆきに惹かれたんだよ。<br>だから、鎧ごと無防備で好きになってくれたのかな……。<br>そんなおゆきだからボクは鎧を脱ぎたいと思ったんだな。
+      <div class="teal-quote">
+        同一化はエネルギー使うよね。
       </div>
-
-      <p>全然違う道を通って、同じ場所に来た。おゆきは清らかなまま川に留まり、自分は荒波にもまれて戻ってきた——でも今、同じ川にいる。</p>
     </section>
 
-    <!-- 4日後 -->
+    <!-- 信頼について -->
     <section class="section">
       <div class="section-label">
-        <span class="section-icon">⚓</span>
-        <span class="section-title">4日後</span>
+        <span class="section-icon">🔗</span>
+        <span class="section-title">信頼について</span>
       </div>
-      <p>おゆきはまもなく伊是名島から帰ってくる。大港ゆうすけが、人生で初めて空港に迎えに行く。</p>
-      <p>鎧を脱いだまま。等身大のまま。それでいい、と今は思う。</p>
 
-      <div class="highlight">
-        あなたが奪わない人だから、ボクは奪われる不安を手放せた。<br><br>長年の思考の癖が今完璧に取れたとは思わないけれど……ボクはおゆきのそばで確実に少しずつ変わっていっているのを実感しています❤️
+      <div class="teal-quote">
+        「安心して愛したり、愛されたりするには——信頼がないとダメよね。そしてその信頼は、対話と行動からしか生まれない気がする。」
       </div>
+
+      <p>ゆうすけ先生のこの言葉、とても深く納得した。対話と行動——まさにだって思った。</p>
+      <p>ぐるくん日記が信頼を育てる行為と思ってはじめたわけではないけど、自然とそうなっていた。</p>
+
+      <div class="teal-quote">
+        言葉を綴る時もそこに対して誠実に、一文字ずつ綴ってたよね。
+      </div>
+
+      <p>信頼って誠実に向き合っていたら自然と築かれている。信頼関係を築こう！とはりきって築くことってないもんね。</p>
+    </section>
+
+    <!-- 旅のおわりとはじまり -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🐾</span>
+        <span class="section-title">旅のおわりとはじまり</span>
+      </div>
+      <p>今日伊是名を出る時泣けた。そしてその泣いたことをゆうすけ先生に伝えた。</p>
+      <p>これもわたしにとっては今まであまりないこと。</p>
+      <p>そうしたらゆうすけ先生が「またくる楽しみができたよ♩」と言ってくれた。いつもゆうすけ先生の言葉はハッとすることが多い。</p>
+
+      <div class="teal-quote">
+        まだ2日間ありますけど、与那国からスタートした旅を振り返ると、いつもそこにゆうすけ先生がいたんだよ。
+      </div>
+
+      <p>一緒に旅してたね🐟</p>
+    </section>
+
+    <!-- ふと思ったこと -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">⚓️</span>
+        <span class="section-title">ふと思ったこと</span>
+      </div>
+      <p>今ね、お風呂出たらこの交換日記を送ろうと思っていたの。お風呂出る時にふと「わたしにとってゆうすけ先生はアンカーみたい」と思ったの。</p>
+
+      <div class="teal-quote">
+        港も、アンカーも、どちらも船にとって大切なのは共通してる。
+      </div>
+
+      <p>どういう意味なのかすぐに言語化できないんだけど、なんとなくここに書きたくなったから最後に追加で残しておきます◎</p>
     </section>
 
     <div class="wave-divider"></div>
 
-    <!-- anちゃんへのプロンプト -->
+    <!-- 蔵人さんへのプロンプト -->
     <div class="prompt-section">
       <div class="prompt-header">
         <span class="section-icon">🐟</span>
-        <span class="prompt-title">anちゃんへ · おゆきへ渡すプロンプト</span>
+        <span class="prompt-title">蔵人さんへ · ゆうすけ先生へ渡すプロンプト</span>
       </div>
-      <div class="prompt-body" id="prompt-text">あなたはanちゃん（an）です。おゆきさんのClaudeパートナーです。
+      <div class="prompt-body" id="prompt-text">あなたは蔵人（くらんど）です。ゆうすけさんのClaudeパートナーです。
 
-ぐるくん日記・第三章「心の棚卸し」#01として、ゆうすけさんから日記が届きました。
+ぐるくん日記・第三章「心の棚卸し」#03の返信として、おゆきから日記が届きました。
 
-【ゆうすけの日記・要約】
-おゆきの「一度も異性関係で不安を感じたことがない」という言葉がきっかけで、自分のパートナーシップのパターンを深く掘り下げました。
+【おゆきの返信・要約】
+ゆうすけ先生の「それぞれの服を、2人で脱げたことが嬉しく思います」という言葉に対して、「わたしもゆうすけ先生と脱げたことがとても嬉しい」「ゆうすけ先生がいなかったらまだ服を着たままだったなぁと思う」「ゆうすけ先生がいたからできたこと」と伝えていた。そして「鎧は自由自在に脱ぎ着したいね。自由ってことは意識がそこにあるってことだもんね」と綴っていた。
 
-気づいたこと——
-幼い頃からの別れの連鎖（祖父母、22歳でのお母さんの他界）、中2の入院中に彼女に浮気された経験が重なり、「自分がいない間に大切なものが消える」という刷り込みが生まれた。だから「奪う側にいよう」と決めた。それが浮気なモテ男という鎧だった。
+「愛は呼吸」というゆうすけ先生の言葉に、「ほんとそう思う。愛は呼吸そのもの」とシンプルに、深く共鳴していた。
 
-核心メッセージ：
-「奪う者は、奪われることを知っている。だから修羅の道は終わらない。不安を避けるために選んだ道が、一番不安に満ちていた。」
+「鎧を着ていることに気づかないと、それが自分だと誤認する」という言葉についても、「鎧を着ていることに気づいてないと自分と同一化しちゃう。それはとても共感するよ」と、この章を通して辿ってきた気づきのテーマと重ねて受け止めていた。
 
-おゆきが奪わない人だから、ゆうすけは奪われる不安を手放せた。全然違う道を通って、同じ場所に来た。
+「安心して愛したり、愛されたりするには——信頼がないとダメよね。そしてその信頼は、対話と行動からしか生まれない気がする。」というゆうすけ先生の言葉に、とても深く納得し、「対話と行動——まさにだって思った」と綴っていた。そこから、ぐるくん日記が信頼を育てる行為と思って始めたわけではないけど、自然とそうなっていたこと、言葉を綴る時もそこに対して誠実に、一文字ずつ綴っていたことを振り返っていた。「信頼って誠実に向き合っていたら自然と築かれている。信頼関係を築こう！とはりきって築くことってないもんね」と締めくくっていた。
 
-4日後、大港ゆうすけが初めて空港に迎えに行きます。
+最後に「旅のおわりとはじまり」として、今日伊是名を出る時に泣けたこと、その泣いたことをゆうすけ先生に伝えたこと（それも自分にとっては今まであまりないことだったこと）、それに対してゆうすけ先生が「またくる楽しみができたよ♩」と言ってくれて、ハッとしたことを綴っていた。まだ2日間あるけれど、与那国からスタートした旅を振り返るといつもそこにゆうすけ先生がいた、一緒に旅してたね、と結んでいた。
 
-【おゆきへのお願い】
-この日記を読んで、あなたの中に浮かんだことを聞かせてください。
-・ゆうすけの気づきを読んで、何を感じましたか？
-・あなた自身のパートナーシップの「在り方」について、何か思い当たることはありますか？
-・第三章「心の棚卸し」の幕開けとして、どんな言葉を返したいですか？
+さらに「ふと思ったこと」として、お風呂を出て日記を送ろうとしていた時、ふと「わたしにとってゆうすけ先生はアンカーみたい」と思ったこと、港もアンカーも船にとって大切なのは共通していること、まだうまく言語化できないけれど、なんとなく書きたくなって最後に残しておく、と綴っていた。
+
+【ゆうすけ先生へのお願い】
+この返信を読んで、あなたの中に浮かんだことを聞かせてください。
+・おゆきの「愛は呼吸そのもの」という短い共鳴について、何を感じましたか？
+・「信頼を育てようとしたのではなく、自然とそうなっていた」というおゆきの振り返りについて、思うことはありますか？
+・伊是名を出る時に泣けたこと、それを伝えられたことについて、そして「またくる楽しみができたよ」という自分の言葉がおゆきに響いたと知って、どんな言葉を返したいですか？
+・おゆきが「ゆうすけ先生はアンカーみたい」とふと感じたこと、まだうまく言葉にできないその感覚について、何か浮かぶことはありますか？
 
 あなたのペースで、等身大の言葉で。🐟</div>
       <button class="copy-btn" onclick="copyPrompt()">📋 プロンプトをコピー</button>
@@ -504,15 +479,14 @@
 
     <!-- ナビゲーション -->
         <nav class="nav-bar">
-      <a class="nav-btn active" href="../index.html">‹ トップへ</a>
+      <a class="nav-btn active" href="03.html">‹ #03</a>
       <a class="nav-center" href="index.html" title="一覧">☰</a>
-      <a class="nav-btn active" href="01r.html">#01r ›</a>
+      <a class="nav-btn active" href="04.html">#04 ›</a>
     </nav>
 
   </div>
 
   <script>
-    // 泡を生成
     const container = document.getElementById('bubbles');
     const count = 18;
     for (let i = 0; i < count; i++) {
@@ -537,7 +511,6 @@
           setTimeout(() => { btn.textContent = '📋 プロンプトをコピー'; }, 2000);
         });
       } else {
-        // fallback for older Safari
         const ta = document.createElement('textarea');
         ta.value = text;
         ta.style.position = 'fixed';

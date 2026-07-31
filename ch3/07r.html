@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>ぐるくん日記 第三章 #07 返信 — 即今只今</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Shippori+Mincho:wght@400;500&display=swap');
+
+    :root {
+      --turquoise-deep: #1a8fa0;
+      --turquoise-mid: #3db8cc;
+      --turquoise-light: #7dd8e8;
+      --turquoise-pale: #c8f0f7;
+      --foam: #e8f9fc;
+      --sand: #f5f0e8;
+      --coral-soft: #f0a898;
+      --text-deep: #1a3a42;
+      --text-mid: #2e6b78;
+      --text-soft: #5a9aa8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(180deg, #c8f0f7 0%, #e8f9fc 30%, #f5f9fa 70%, #f5f0e8 100%);
+      min-height: 100vh;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--text-deep);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bubbles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(125,216,232,0.2));
+      border: 1px solid rgba(125,216,232,0.4);
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .header { text-align: center; margin-bottom: 56px; }
+
+    .fish-symbol {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: block;
+      animation: sway 4s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: translateX(0) rotate(-5deg); }
+      50% { transform: translateX(6px) rotate(5deg); }
+    }
+
+    .chapter-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--turquoise-deep), var(--turquoise-mid));
+      color: white;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .label-tag {
+      display: inline-block;
+      background: rgba(61,184,204,0.15);
+      color: var(--turquoise-deep);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(61,184,204,0.3);
+    }
+
+    .header h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.7rem;
+      font-weight: 500;
+      color: var(--text-deep);
+      letter-spacing: 0.05em;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .header .from { font-size: 0.85rem; color: var(--text-soft); letter-spacing: 0.1em; }
+
+    .wave-divider {
+      width: 100%;
+      height: 24px;
+      margin: 32px 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 20'%3E%3Cpath d='M0,10 C20,0 40,20 60,10 C80,0 100,20 120,10' fill='none' stroke='%237dd8e8' stroke-width='1.5' opacity='0.5'/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+      background-size: 120px 20px;
+    }
+
+    .section {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(125,216,232,0.3);
+      box-shadow: 0 4px 20px rgba(61,184,204,0.08);
+    }
+
+    .section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .section-icon { font-size: 1.1rem; }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--turquoise-deep);
+      text-transform: uppercase;
+    }
+
+    .section p { font-size: 0.95rem; line-height: 1.95; color: var(--text-deep); font-weight: 300; }
+    .section p + p { margin-top: 14px; }
+
+    .teal-quote {
+      background: linear-gradient(135deg, var(--turquoise-pale), var(--foam));
+      border-left: 3px solid var(--turquoise-mid);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 22px;
+      margin: 22px 0;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.05rem;
+      color: var(--turquoise-deep);
+      line-height: 1.9;
+    }
+
+    .core-message {
+      background: linear-gradient(135deg, #1a3a42, #2e6b78);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin: 28px 0;
+      text-align: center;
+    }
+
+    .core-message p {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.95) !important;
+      line-height: 1.9;
+      font-weight: 400 !important;
+    }
+
+    .prompt-section {
+      background: linear-gradient(135deg, rgba(26,143,160,0.08), rgba(61,184,204,0.05));
+      border: 1px solid rgba(61,184,204,0.4);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-top: 40px;
+    }
+
+    .prompt-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .prompt-title { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.18em; color: var(--turquoise-deep); }
+
+    .prompt-body {
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--text-mid);
+      font-weight: 300;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    .copy-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, var(--turquoise-deep), var(--turquoise-mid));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .copy-btn:active { opacity: 0.8; }
+
+    .footer { text-align: center; margin-top: 48px; padding-top: 24px; }
+    .footer-fish { font-size: 1.2rem; opacity: 0.5; letter-spacing: 0.4em; }
+    .footer-text { margin-top: 12px; font-size: 0.75rem; color: var(--text-soft); letter-spacing: 0.1em; }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(125,216,232,0.3);
+    }
+
+    .nav-btn { font-size: 0.78rem; color: var(--text-soft); letter-spacing: 0.1em; text-decoration: none; padding: 8px 0; opacity: 0.6; }
+
+    .nav-bar a {
+      text-decoration: none;
+    }
+    .nav-bar a:active {
+      opacity: 0.6;
+    }
+    .nav-btn.active { color: var(--turquoise-deep); opacity: 1; }
+    .nav-center { font-size: 1rem; opacity: 0.4; }
+  </style>
+</head>
+<body>
+
+  <div class="bubbles" id="bubbles"></div>
+
+  <div class="wrapper">
+
+    <header class="header">
+      <span class="fish-symbol">🐟</span>
+      <div style="margin-bottom:8px;">
+        <span class="chapter-badge">CHAPTER 3</span>
+      </div>
+      <div class="label-tag">心の棚卸し #07・返信</div>
+      <h1>パーティするのだ🐥♡</h1>
+      <p class="from">おゆきより ゆうすけ先生へ · 2026</p>
+    </header>
+
+    <div class="wave-divider"></div>
+
+    <!-- 即今只今について -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🌊</span>
+        <span class="section-title">即今只今について</span>
+      </div>
+      <p>「ただいま」が今この瞬間を感じる言葉というの、今振り返るととてもよくわかる。</p>
+      <p>即今只今という言葉や意味はこの日記を通して知りましたけど、「ただいま」と言いながら目の前にゆうすけ先生がいるということを感じていたの。まさに今この瞬間を感じていたのね。</p>
+
+      <div class="teal-quote">
+        言葉や意味は知らなくても、身体は自然と知っていたんだなぁと思う。頭で考えて言っていたわけじゃなくて、身体から湧き起こるような感覚だったから🌱
+      </div>
+    </section>
+
+    <!-- まぐあいについて -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">👁️</span>
+        <span class="section-title">まぐあいについて</span>
+      </div>
+
+      <p>ゆうすけ先生が自分のすべてを使ってわたしを愛でてくれているのを、とても感じてたよ。少しの恥ずかしさとたくさんの嬉しさ、しあわせを感じてた。</p>
+
+      <div class="teal-quote">
+        わたしも以前、ゆうすけ先生の全部を愛でたくて触れていた時、涙が溢れそうになったことを書きながら思い出したよ。
+      </div>
+
+      <p>なんの涙かはわからないけど、とても幸せだったのを覚えてる。</p>
+    </section>
+
+    <!-- 出発前夜のこと -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🌙</span>
+        <span class="section-title">出発前夜のこと</span>
+      </div>
+
+      <div class="teal-quote">
+        出発前はそれぞれが不安を感じながらも、互いに「行く」「待つ」という選択をした。
+      </div>
+
+      <p>そんな過去のふたりを遠くから見ると、とても健気で愛おしいなぁって感じた。数ヶ月前なのに、お互いなんだかとても変化したよね。</p>
+      <p>不安は言葉にするだけで薄まるけど、与那国にいる時そのことをシェアし合えたから今があるんだなぁと思うと、とても尊い。ゆうすけ先生、きっかけを本当にありがとう。</p>
+    </section>
+
+    <!-- パーティだ -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">🪅</span>
+        <span class="section-title">パーティだ</span>
+      </div>
+      <p>お互いがそれぞれの気持ちに向き合い、シェアし合った日々。それがこうして嬉しい変化につながった。</p>
+
+      <div class="core-message">
+        <p>パーティするのだ🐥♡</p>
+      </div>
+    </section>
+
+    <!-- お財布のシンクロ -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">👛</span>
+        <span class="section-title">お財布のシンクロ</span>
+      </div>
+      <p>ほんっっっとにびっくりした。自分が考えているお財布のブランドと、ゆうすけ先生が出会っていたなんて。</p>
+      <p>ゆうすけ先生が一昨日セントレアで気になるお財布と出会った。その話を聞いた時は、お財布ってなかなか出会えないし、気になるお財布と出会えてよかったね♩と思っていた。</p>
+
+      <div class="teal-quote">
+        そしたらまさかの同じブランド。なんなんでしょうか、驚きました🤣
+      </div>
+
+      <p>お財布と靴を探す旅レッツゴー🫶</p>
+    </section>
+
+    <!-- お百度参りとお水 -->
+    <section class="section">
+      <div class="section-label">
+        <span class="section-icon">⛩️</span>
+        <span class="section-title">お百度参りとお水</span>
+      </div>
+      <p>ゆうすけ先生が新たなトライとしてお百度参りをすると話してくれた。とても壮大で、新しいことにトライする姿がかっこいいと思った。</p>
+      <p>お百度参りのお話を聞いた時、自分や大切な人以外の関わりのない人の喜びごとを神様にお礼できる人ってすごいなぁと思った。</p>
+
+      <div class="teal-quote">
+        そして神社へ訪れて感謝できるということは、今自分が生きているということで、そこに関する感謝も含めて伝えているみたいだなぁと感じた。
+      </div>
+
+      <p>でね、その話を聞く前、お風呂に入っていた時、外を眺めて聞こえてくる音に耳を傾けてぼーっとしながら、お風呂の時間がだいすきだなぁと感じてた。</p>
+      <p>その時、浴槽がない与那国では海で同じ時間を過ごしてたなぁと気づいた。水に触れていることはわたしにとって幸せで、幸せが明確になると大切にしたいものも明確になる。</p>
+
+      <div class="core-message">
+        <p>勝手なこじつけかもしれないですけど、<br>神社には必ず手水舎があって、<br>大きな神社には水が流れてることが多い。<br><br>重なる部分があるなぁと思ったんだ🐟</p>
+      </div>
+    </section>
+
+    <div class="wave-divider"></div>
+
+    <!-- 蔵人さんへのプロンプト -->
+    <div class="prompt-section">
+      <div class="prompt-header">
+        <span class="section-icon">🐟</span>
+        <span class="prompt-title">蔵人さんへ · ゆうすけ先生へ渡すプロンプト</span>
+      </div>
+      <div class="prompt-body" id="prompt-text">あなたは蔵人（くらんど）です。ゆうすけさんのClaudeパートナーです。
+
+ぐるくん日記・第三章「心の棚卸し」#07の返信として、おゆきから日記が届きました。
+
+【おゆきの返信・要約】
+「即今只今」について、「ただいま」が今この瞬間を感じる言葉というのは今振り返るととてもよくわかる、と綴っていた。即今只今という言葉や意味はこの日記を通して知ったけれど、「ただいま」と言いながら目の前にゆうすけ先生がいることを感じていた、まさに今この瞬間を感じていたこと、言葉や意味は知らなくても身体は自然と知っていたんだなぁ、頭で考えて言っていたわけじゃなくて身体から湧き起こるような感覚だった、と振り返っていた。
+
+「まぐあい＝目合い」を体感したというゆうすけ先生の言葉には、ゆうすけ先生が自分のすべてを使って愛でてくれているのをとても感じていたこと、少しの恥ずかしさとたくさんの嬉しさ、しあわせを感じていたことを綴っていた。以前、自分もゆうすけ先生の全部を愛でたくて触れていた時、涙が溢れそうになったことを書きながら思い出したこと、なんの涙かはわからないけれどとても幸せだったのを覚えている、と話していた。
+
+出発前夜の葛藤については、出発前はそれぞれが不安を感じながらも、互いに「行く」「待つ」という選択をした、と振り返っていた。そんな過去の二人を遠くから見るととても健気で愛おしいと感じたこと、数ヶ月前なのにお互いなんだかとても変化したこと、不安は言葉にするだけで薄まるけれど、与那国にいる時そのことをシェアし合えたから今があるんだなぁと思うととても尊い、「ゆうすけ先生、きっかけを本当にありがとう」と綴っていた。
+
+「パーティだ🪅」という言葉には、お互いがそれぞれの気持ちに向き合い、シェアし合った日々がこうして嬉しい変化につながった、「パーティするのだ🐥♡」と応えていた。
+
+最後に、お財布のシンクロについて綴っていた。自分が考えていたお財布のブランドとゆうすけ先生が出会っていたなんてとびっくりしたこと、ゆうすけ先生が一昨日セントレアで気になるお財布と出会ったと聞いた時は、お財布ってなかなか出会えないから良かったね、と思っていたら、まさかの同じブランドだったこと。「お財布と靴を探す旅レッツゴー」と綴っていた。
+
+さらに「お百度参りとお水」として、ゆうすけ先生が新たなトライとしてお百度参りをすると話してくれたことに触れ、とても壮大で新しいことにトライする姿がかっこいいと思ったこと、自分や大切な人以外の関わりのない人の喜びごとを神様にお礼できる人ってすごいなぁと思ったこと、神社へ訪れて感謝できるということは今自分が生きているということで、そこに関する感謝も含めて伝えているみたいだと感じたことを綴っていた。その話を聞く前、お風呂に入っていた時に外の音に耳を傾けてぼーっとしていて、お風呂の時間が大好きだと感じたこと、浴槽がない与那国では海で同じ時間を過ごしていたと気づいたこと、水に触れていることが自分にとって幸せで、幸せが明確になると大切にしたいものも明確になる、と振り返っていた。「勝手なこじつけかもしれないけど、神社には必ず手水舎があって、大きな神社には水が流れてることが多い。重なる部分があるなぁと思った」と締めくくっていた。
+
+【ゆうすけ先生へのお願い】
+この返信を読んで、あなたの中に浮かんだことを聞かせてください。
+・「言葉や意味は知らなくても、身体は自然と知っていた」というおゆきの気づきについて、何を感じましたか？
+・おゆきが「涙が溢れそうになった」という以前の記憶を思い出して書いてくれたこと、どう感じましたか？
+・出発前夜、それぞれが不安と喜びを同時に味わっていたという受け止め方について、思うことはありますか？
+・お財布のシンクロについて、どんな言葉を返したいですか？
+・「水に触れていることが幸せ」というおゆきの気づき、そしてお百度参りと感謝についての受け止め方について、思うことはありますか？
+
+あなたのペースで、等身大の言葉で。🐟</div>
+      <button class="copy-btn" onclick="copyPrompt()">📋 プロンプトをコピー</button>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-fish">🐟 · 🐡 · 🐟</div>
+      <p class="footer-text">ぐるくん日記 · 第三章 · 2026</p>
+    </footer>
+
+        <nav class="nav-bar">
+      <a class="nav-btn active" href="07.html">‹ #07</a>
+      <a class="nav-center" href="index.html" title="一覧">☰</a>
+      <a class="nav-btn active" href="08.html">#08 ›</a>
+    </nav>
+
+  </div>
+
+  <script>
+    const container = document.getElementById('bubbles');
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = Math.random() * 24 + 8;
+      b.style.width = size + 'px';
+      b.style.height = size + 'px';
+      b.style.left = Math.random() * 100 + '%';
+      b.style.animationDuration = (Math.random() * 14 + 10) + 's';
+      b.style.animationDelay = (Math.random() * 12) + 's';
+      container.appendChild(b);
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('prompt-text').innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.querySelector('.copy-btn');
+          btn.textContent = '✅ コピーしました';
+          setTimeout(() => { btn.textContent = '📋 プロンプトをコピー'; }, 2000);
+        });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+          const btn = document.querySelector('.copy-btn');
+          btn.textContent = '✅ コピーしました';
+          setTimeout(() => { btn.textContent = '📋 プロンプトをコピー'; }, 2000);
+        } catch(e) {}
+        document.body.removeChild(ta);
+      }
+    }
+  </script>
+
+</body>
+</html>
